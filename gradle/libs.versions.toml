@@ -1,0 +1,13 @@
+[versions]
+zip4j = "2.11.6"
+apache-commons-io = "3.20.0"
+apache-commons-compress = "1.28.0"
+guava = "33.5.0-jre"
+lombok = "1.18.44"
+
+[libraries]
+zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
+apache-commons-io = { module = "org.apache.commons:commons-lang3", version.ref = "apache-commons-io" }
+apache-commons-compress = { module = "org.apache.commons:commons-compress", version.ref = "apache-commons-compress" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }

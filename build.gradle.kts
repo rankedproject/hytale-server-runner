@@ -22,14 +22,13 @@ repositories {
 }
 
 dependencies {
-    implementation(gradleApi())
+    compileOnly(gradleApi())
+    compileOnly(libs.lombok)
 
-    implementation("net.lingala.zip4j:zip4j:2.11.6")
-    implementation("org.apache.commons:commons-lang3:3.20.0")
-    implementation("commons-io:commons-io:2.21.0")
-    implementation("com.google.guava:guava:33.5.0-jre")
-    implementation("org.apache.commons:commons-compress:1.28.0")
+    implementation(libs.zip4j)
+    implementation(libs.apache.commons.io)
+    implementation(libs.apache.commons.compress)
+    implementation(libs.guava)
 
-    compileOnly("org.projectlombok:lombok:1.18.44")
-    annotationProcessor("org.projectlombok:lombok:1.18.44")
+    annotationProcessor(libs.lombok)
 }

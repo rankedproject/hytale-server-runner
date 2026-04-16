@@ -16,7 +16,7 @@ public abstract class PrepareReinstallStep extends StepDefault {
     @Override
     public @NotNull Step.Options options() {
         return Options.builder()
-                .startStep(() -> FileUtil.deleteFiles(getHytaleBootExtension().getRunDirectory().get().getAsFile()))
+                .startStep(() -> FileUtil.deleteDirectory(getHytaleBootExtension().getRunDirectory().get().getAsFile()))
                 .build();
     }
 }
