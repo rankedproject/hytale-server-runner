@@ -40,7 +40,7 @@ public abstract class HytaleBootExtension implements Serializable {
      * Adds an environment variable to the server process.
      *
      * @param identifier variable name
-     * @param value variable value
+     * @param value      variable value
      */
     public void environment(final @NotNull String identifier, final @NotNull Object value) {
         getEnvironment().put(identifier, value);
@@ -52,7 +52,8 @@ public abstract class HytaleBootExtension implements Serializable {
 
     /**
      * Accesses the nested configuration for server mods.
-     * * @return mod configuration extension
+     *
+     * @return mod configuration extension
      */
     @Nested
     public abstract @NotNull ModExtension getModExtension();

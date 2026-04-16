@@ -3,8 +3,8 @@ package net.rankedproject.hytale.boot.step.impl;
 import com.google.common.net.HostAndPort;
 import lombok.SneakyThrows;
 import net.rankedproject.hytale.boot.HytaleBootExtension;
-import net.rankedproject.hytale.boot.step.Step;
-import net.rankedproject.hytale.boot.step.type.StepExec;
+import net.rankedproject.hytale.boot.step.TaskStep;
+import net.rankedproject.hytale.boot.step.type.TaskStepExec;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
@@ -19,10 +19,10 @@ import java.util.List;
  * Configures the JVM classpath, main class, and working directory
  * based on the {@link HytaleBootExtension}.
  */
-public abstract class LaunchServerStep extends StepExec {
+public abstract class LaunchServerStep extends TaskStepExec {
 
     @Override
-    public @NotNull Step.Options options() {
+    public final @NotNull TaskStep.Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();
@@ -40,11 +40,12 @@ public abstract class LaunchServerStep extends StepExec {
                 sourceSet.getRuntimeClasspath()
         ));
 
-        getMainClass().set(bootExtension.getServerJarMainClass());
         setClasspath(classpath);
+        getMainClass().set(bootExtension.getServerJarMainClass());
 
         setWorkingDir(bootExtension.getServerDirectory());
         setStandardInput(System.in);
+
         environment(bootExtension.getEnvironment().get());
         jvmArgs(bootExtension.getJvmArgs().get());
 

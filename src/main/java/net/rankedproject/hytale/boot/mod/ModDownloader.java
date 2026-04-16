@@ -17,7 +17,7 @@ import java.util.List;
  * based on the mod's implementation type.
  */
 @RequiredArgsConstructor
-public final class ModContext {
+public final class ModDownloader {
 
     private final Property<ModDownloaderStrategyRegistry> downloaderStrategyRegistry;
 

@@ -19,16 +19,16 @@ public abstract class DefaultRunningTask extends DefaultTask implements GradleRu
      * Entry point for Gradle execution.
      */
     @TaskAction
-    public void runTask() {
+    public final void runTask() {
         run();
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     @Internal
-    public @NotNull HytaleBootExtension getHytaleBootExtension() {
+    @Override
+    public final @NotNull HytaleBootExtension getHytaleBootExtension() {
         return getProject().getExtensions().getByType(HytaleBootExtension.class);
     }
 }

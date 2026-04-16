@@ -1,6 +1,6 @@
 package net.rankedproject.hytale.boot.task.global;
 
-import net.rankedproject.hytale.boot.step.Step;
+import net.rankedproject.hytale.boot.step.TaskStep;
 import net.rankedproject.hytale.boot.step.impl.DownloadModStep;
 import net.rankedproject.hytale.boot.step.impl.DownloadServerAssetStep;
 import net.rankedproject.hytale.boot.step.impl.LaunchServerStep;
@@ -25,7 +25,7 @@ public abstract class LaunchServerTask extends GlobalRunningTask {
      * @return an ordered list of steps required to reach a running server state.
      */
     @Override
-    public @NotNull List<Class<? extends Step>> steps() {
+    public @NotNull List<Class<? extends TaskStep>> steps() {
         return List.of(
                 PrepareDownloaderStep.class,
                 DownloadServerAssetStep.class,

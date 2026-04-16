@@ -30,9 +30,9 @@ public abstract class JavaExecRunningTask extends JavaExec implements GradleRunn
     /**
      * {@inheritDoc}
      */
-    @Override
     @Internal
-    public @NotNull HytaleBootExtension getHytaleBootExtension() {
+    @Override
+    public final @NotNull HytaleBootExtension getHytaleBootExtension() {
         return getProject().getExtensions().getByType(HytaleBootExtension.class);
     }
 }

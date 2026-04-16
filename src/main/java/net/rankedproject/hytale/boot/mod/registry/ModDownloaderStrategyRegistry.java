@@ -52,7 +52,7 @@ public abstract class ModDownloaderStrategyRegistry implements BuildService<Hyta
      * @throws NullPointerException if no strategy is registered for the given type
      */
     @SuppressWarnings("unchecked")
-    public <M extends Mod> @NotNull ModDownloaderStrategy<M> getDownloader(
+    public final <M extends Mod> @NotNull ModDownloaderStrategy<M> getDownloader(
             final @NotNull Class<? extends Mod> modType
     ) {
         return (ModDownloaderStrategy<M>) this.downloaderStrategy.get(modType);

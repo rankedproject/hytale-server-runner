@@ -29,7 +29,7 @@ public abstract class ModDownloaderStrategy<M extends Mod> implements BuildServi
      *
      * @param mod the mod definition to process
      */
-    public void downloadMod(final @NotNull M mod) {
+    public final void downloadMod(final @NotNull M mod) {
         final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 

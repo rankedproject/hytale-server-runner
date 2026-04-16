@@ -30,7 +30,7 @@ public abstract class ModExtension {
      * @param url  the direct download URL for the mod file
      * @param file the name the file should be saved as locally
      */
-    public void url(final @NotNull String url, final @NotNull String file) {
+    public final void url(final @NotNull String url, final @NotNull String file) {
         final UrlMod mod = UrlMod.of(url, file);
         getMods().add(mod);
     }
@@ -43,7 +43,7 @@ public abstract class ModExtension {
      * @param tag        the specific release tag (e.g., "v1.0.0")
      * @param assetName  the name of the file attached to the release
      */
-    public void github(
+    public final void github(
             final @NotNull String owner,
             final @NotNull String repository,
             final @NotNull String tag,

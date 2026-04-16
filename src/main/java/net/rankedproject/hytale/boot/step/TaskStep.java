@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * Steps wrap logic into a {@link Options} record, allowing for
  * standardized execution of setup ("start") and cleanup ("stop") logic.
  */
-public interface Step extends GradleRunningTask {
+public interface TaskStep extends GradleRunningTask {
 
     /**
      * Standard execution flow for the step.
@@ -19,7 +19,7 @@ public interface Step extends GradleRunningTask {
      * Runs the start logic, followed by the optional stop logic.
      */
     default void runStep() {
-        final Step.Options options = options();
+        final TaskStep.Options options = options();
         options.startStep.run();
 
         final Runnable stopStep = options.stopStep;
@@ -31,7 +31,7 @@ public interface Step extends GradleRunningTask {
     /**
      * @return the configuration options for this step's execution
      */
-    @NotNull Step.Options options();
+    @NotNull TaskStep.Options options();
 
     /**
      * Configuration for step execution.

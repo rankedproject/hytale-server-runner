@@ -2,8 +2,8 @@ package net.rankedproject.hytale.boot.step.impl;
 
 import net.rankedproject.hytale.boot.HytaleBootExtension;
 import net.rankedproject.hytale.boot.resource.HttpResourceProvider;
-import net.rankedproject.hytale.boot.step.Step;
-import net.rankedproject.hytale.boot.step.type.StepDefault;
+import net.rankedproject.hytale.boot.step.TaskStep;
+import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import net.rankedproject.hytale.boot.util.FileUtil;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
@@ -20,10 +20,10 @@ import java.time.Duration;
  * Downloads and extracts the core downloader utility if the
  * server software is not already present.
  */
-public abstract class PrepareDownloaderStep extends StepDefault {
+public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
     @Override
-    public @NotNull Step.Options options() {
+    public final @NotNull TaskStep.Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();

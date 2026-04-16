@@ -18,7 +18,6 @@ gradlePlugin {
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {

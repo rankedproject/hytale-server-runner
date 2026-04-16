@@ -25,7 +25,7 @@ public abstract class UrlDownloaderStrategy extends ModDownloaderStrategy<UrlMod
      * @param mod the URL-based mod definition
      */
     @Override
-    protected void download(final @NotNull UrlMod mod) {
+    protected final void download(final @NotNull UrlMod mod) {
         final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 

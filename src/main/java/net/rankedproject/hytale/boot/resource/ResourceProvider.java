@@ -26,7 +26,7 @@ public abstract sealed class ResourceProvider
      *
      * @return a fluent builder instance
      */
-    public @NotNull ResourceProvider.ResourceRequest.Builder builder() {
+    public final @NotNull ResourceProvider.ResourceRequest.Builder builder() {
         return ResourceRequest.builder(this);
     }
 
@@ -56,11 +56,6 @@ public abstract sealed class ResourceProvider
             private URI uri;
             private File destinationFile;
             private Duration timeout = Duration.ofSeconds(5);
-
-            public @NotNull Builder uri(final @NotNull String url) {
-                this.uri = URI.create(url);
-                return this;
-            }
 
             public @NotNull Builder uri(final @NotNull URI uri) {
                 this.uri = uri;

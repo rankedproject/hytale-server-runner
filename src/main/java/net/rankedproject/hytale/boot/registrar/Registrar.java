@@ -15,5 +15,5 @@ public interface Registrar<C> {
      * @param identifier unique name or ID for the component
      * @param valueClass the class implementation to register
      */
-    void register(final @NotNull String identifier, final @NotNull Class<? extends C> valueClass);
+    void register(@NotNull String identifier, @NotNull Class<? extends C> valueClass);
 }

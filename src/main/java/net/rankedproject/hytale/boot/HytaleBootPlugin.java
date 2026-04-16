@@ -22,13 +22,13 @@ import org.slf4j.LoggerFactory;
 public abstract class HytaleBootPlugin implements Plugin<Project> {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(HytaleBootPlugin.class);
-    public static final String PLUGIN_GROUP = "hytale";
+    public static final String PLUGIN_GROUP = "hytaleBoot";
 
     @Override
-    public void apply(final @NotNull Project project) {
-        project.getExtensions().create("hytaleBoot", HytaleBootExtension.class, project.getLayout());
+    public final void apply(final @NotNull Project project) {
+        project.getExtensions().create(PLUGIN_GROUP, HytaleBootExtension.class, project.getLayout());
         serviceSetup(project);
-        gradleTaskSetup(project);
+        taskSetup(project);
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class HytaleBootPlugin implements Plugin<Project> {
      *
      * @param project current project instance
      */
-    private void gradleTaskSetup(final @NotNull Project project) {
+    private void taskSetup(final @NotNull Project project) {
         final GlobalTaskRegistrar taskRegistrar = new GlobalTaskRegistrar(project);
         taskRegistrar.register("launchServer", LaunchServerTask.class);
         taskRegistrar.register("updateServer", UpdateServerTask.class);

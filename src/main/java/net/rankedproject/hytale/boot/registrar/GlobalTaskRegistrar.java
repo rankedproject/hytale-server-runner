@@ -1,14 +1,11 @@
 package net.rankedproject.hytale.boot.registrar;
 
 import lombok.RequiredArgsConstructor;
-import net.rankedproject.hytale.boot.step.Step;
-import net.rankedproject.hytale.boot.step.StepContext;
+import net.rankedproject.hytale.boot.step.TaskStepLoader;
 import net.rankedproject.hytale.boot.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Handles the registration and lifecycle setup of Global tasks.
@@ -31,11 +28,8 @@ public final class GlobalTaskRegistrar implements Registrar<GlobalRunningTask> {
         configureTask(taskProvider);
     }
 
-    private void configureTask(final @NotNull TaskProvider<? extends GlobalRunningTask> provider) {
-        final GlobalRunningTask task = provider.get();
-        final List<Class<? extends Step>> steps = task.steps();
-
-        final StepContext stepContext = new StepContext(steps, this.project);
-        stepContext.setup(task);
+    private void configureTask(final @NotNull TaskProvider<? extends GlobalRunningTask> taskProvider) {
+        final TaskStepLoader stepLoader = new TaskStepLoader(taskProvider.get(), this.project);
+        stepLoader.setup();
     }
 }
