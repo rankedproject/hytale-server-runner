@@ -30,22 +30,28 @@ public abstract class ModDownloaderStrategy<M extends Mod> implements BuildServi
      * @param mod the mod definition to process
      */
     public final void downloadMod(final @NotNull M mod) {
-        final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
+        final HytaleBootExtension hytaleBootExtension = this.getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 
         if (!modsDirectory.exists()) {
             modsDirectory.mkdirs();
         }
 
-        if (isModInstalled(mod.getFileName())) {
+        if (this.isModInstalled(mod.getFileName())) {
             return;
         }
 
-        download(mod);
+        this.download(mod);
     }
 
+    /**
+     * Checks if a mod is already present in the local mods directory.
+     *
+     * @param identifier the file name or identifier of the mod to check
+     * @return {@code true} if the mod file exists on disk, {@code false} otherwise
+     */
     protected boolean isModInstalled(final @NotNull String identifier) {
-        final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
+        final HytaleBootExtension hytaleBootExtension = this.getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 
         return new File(modsDirectory, identifier).exists();

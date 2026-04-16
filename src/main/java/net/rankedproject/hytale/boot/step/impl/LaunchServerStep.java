@@ -3,7 +3,6 @@ package net.rankedproject.hytale.boot.step.impl;
 import com.google.common.net.HostAndPort;
 import lombok.SneakyThrows;
 import net.rankedproject.hytale.boot.HytaleBootExtension;
-import net.rankedproject.hytale.boot.step.TaskStep;
 import net.rankedproject.hytale.boot.step.type.TaskStepExec;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
@@ -22,7 +21,7 @@ import java.util.List;
 public abstract class LaunchServerStep extends TaskStepExec {
 
     @Override
-    public final @NotNull TaskStep.Options options() {
+    public final @NotNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();

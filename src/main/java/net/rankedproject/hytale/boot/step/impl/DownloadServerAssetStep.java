@@ -1,7 +1,6 @@
 package net.rankedproject.hytale.boot.step.impl;
 
 import net.rankedproject.hytale.boot.HytaleBootExtension;
-import net.rankedproject.hytale.boot.step.TaskStep;
 import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import net.rankedproject.hytale.boot.util.FileUtil;
 import org.apache.commons.lang3.SystemUtils;
@@ -25,7 +24,7 @@ public abstract class DownloadServerAssetStep extends TaskStepDefault {
     private static final String LINUX_EXECUTABLE_FILE = "hytale-downloader-linux-amd64";
 
     @Override
-    public final @NotNull TaskStep.Options options() {
+    public final @NotNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();

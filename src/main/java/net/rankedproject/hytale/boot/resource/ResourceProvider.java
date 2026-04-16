@@ -3,6 +3,7 @@ package net.rankedproject.hytale.boot.resource;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.rankedproject.hytale.boot.extension.HytaleExtensionParameters;
+import net.rankedproject.hytale.boot.resource.ResourceProvider.ResourceRequest.Builder;
 import org.gradle.api.services.BuildService;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,7 @@ public abstract sealed class ResourceProvider
      *
      * @return a fluent builder instance
      */
-    public final @NotNull ResourceProvider.ResourceRequest.Builder builder() {
+    public final @NotNull Builder builder() {
         return ResourceRequest.builder(this);
     }
 
@@ -36,7 +37,7 @@ public abstract sealed class ResourceProvider
      * @param request the details of the resource to fetch
      * @return a future that completes when the resource is stored locally
      */
-    protected abstract @NotNull CompletableFuture<Void> provide(@NotNull ResourceProvider.ResourceRequest request);
+    protected abstract @NotNull CompletableFuture<Void> provide(@NotNull ResourceRequest request);
 
     protected record ResourceRequest(
             @NotNull URI uri,
@@ -44,12 +45,12 @@ public abstract sealed class ResourceProvider
             @NotNull Duration timeout
     ) {
 
-        private static @NotNull ResourceProvider.ResourceRequest.Builder builder(final @NotNull ResourceProvider provider) {
+        private static @NotNull Builder builder(final @NotNull ResourceProvider provider) {
             return new ResourceRequest.Builder(provider);
         }
 
         @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-        public static class Builder {
+        public static final class Builder {
 
             private final ResourceProvider provider;
 
@@ -76,7 +77,7 @@ public abstract sealed class ResourceProvider
                 return this.provider.provide(build());
             }
 
-            private @NotNull ResourceProvider.ResourceRequest build() {
+            private @NotNull ResourceRequest build() {
                 return new ResourceRequest(this.uri, this.destinationFile, this.timeout);
             }
         }

@@ -1,5 +1,6 @@
 plugins {
     java
+    checkstyle
     `kotlin-dsl`
     `maven-publish`
 }
@@ -21,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    "checkstyle"(libs.stylecheck)
     compileOnly(gradleApi())
     compileOnly(libs.lombok)
 
@@ -30,4 +32,26 @@ dependencies {
     implementation(libs.guava)
 
     annotationProcessor(libs.lombok)
+}
+
+extensions.configure<CheckstyleExtension> {
+    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+
+    isIgnoreFailures = true
+    isShowViolations = true
+    toolVersion = libs.versions.checkstyle.get()
+}
+
+tasks.withType<Checkstyle> {
+    configDirectory.set(rootProject.file("config/checkstyle"))
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    source = fileTree("src") {
+        include("**/*.java")
+        exclude("**/generated/**")
+    }
 }

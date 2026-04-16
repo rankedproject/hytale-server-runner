@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import net.rankedproject.hytale.boot.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.TaskProvider;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,14 +32,18 @@ public final class TaskStepLoader {
      * </ol>
      */
     public void setup() {
-        final TaskContainer container = project.getTasks();
         this.runningTask.steps().stream()
-                .map(step -> container.register(TaskLoaderUtil.newTaskIdentifier(runningTask, step), step))
+                .map(this::register)
                 .reduce((previous, current) -> {
                     current.configure(task -> task.dependsOn(previous));
                     return current;
                 })
                 .ifPresent(this.runningTask::dependsOn);
+    }
+
+    private @NotNull TaskProvider<?> register(final @NotNull Class<? extends TaskStep> step) {
+        final TaskContainer container = project.getTasks();
+        return container.register(TaskLoaderUtil.newTaskIdentifier(this.runningTask, step), step);
     }
 
     @UtilityClass

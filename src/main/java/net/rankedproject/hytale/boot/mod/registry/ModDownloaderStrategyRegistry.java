@@ -26,6 +26,9 @@ public abstract class ModDownloaderStrategyRegistry implements BuildService<Hyta
 
     private final Map<Class<? extends Mod>, ModDownloaderStrategy<?>> downloaderStrategy = new HashMap<>();
 
+    /**
+     * Constructs a new registry and initializes default strategy mappings.
+     */
     @Inject
     public ModDownloaderStrategyRegistry() {
         registerDefaults();

@@ -28,7 +28,7 @@ public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
      * @return a future indicating completion or failure
      */
     @Override
-    protected final @NotNull CompletableFuture<Void> provide(final @NotNull ResourceProvider.ResourceRequest request) {
+    protected final @NotNull CompletableFuture<Void> provide(final @NotNull ResourceRequest request) {
         final HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(request.uri())
                 .GET()

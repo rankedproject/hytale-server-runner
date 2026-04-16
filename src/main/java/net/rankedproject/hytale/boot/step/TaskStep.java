@@ -31,7 +31,7 @@ public interface TaskStep extends GradleRunningTask {
     /**
      * @return the configuration options for this step's execution
      */
-    @NotNull TaskStep.Options options();
+    @NotNull Options options();
 
     /**
      * Configuration for step execution.

@@ -2,7 +2,6 @@ package net.rankedproject.hytale.boot.step.impl;
 
 import net.rankedproject.hytale.boot.HytaleBootExtension;
 import net.rankedproject.hytale.boot.resource.HttpResourceProvider;
-import net.rankedproject.hytale.boot.step.TaskStep;
 import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import net.rankedproject.hytale.boot.util.FileUtil;
 import org.gradle.api.Project;
@@ -23,7 +22,7 @@ import java.time.Duration;
 public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
     @Override
-    public final @NotNull TaskStep.Options options() {
+    public final @NotNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();

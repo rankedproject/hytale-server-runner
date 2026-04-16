@@ -26,7 +26,7 @@ public final class FileUtil {
      * @param destinationPath directory to extract files into
      */
     public void unpackZipFile(final @NotNull File zip, final @NotNull File destinationPath) {
-        try (final ZipFile zipFile = new ZipFile(zip)) {
+        try (ZipFile zipFile = new ZipFile(zip)) {
             zipFile.extractAll(destinationPath.getAbsolutePath());
             zipFile.getFile().delete();
         } catch (final IOException exception) {

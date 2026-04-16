@@ -3,7 +3,6 @@ package net.rankedproject.hytale.boot.step.impl;
 import net.rankedproject.hytale.boot.mod.Mod;
 import net.rankedproject.hytale.boot.mod.ModDownloader;
 import net.rankedproject.hytale.boot.mod.registry.ModDownloaderStrategyRegistry;
-import net.rankedproject.hytale.boot.step.TaskStep;
 import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class DownloadModStep extends TaskStepDefault {
 
     @Override
-    public final @NotNull TaskStep.Options options() {
+    public final @NotNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();
