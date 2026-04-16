@@ -10,8 +10,8 @@ version = "1.0"
 gradlePlugin {
     plugins {
         register("hytale-boot-plugin") {
-            id = "hytale.boot"
-            implementationClass = "net.cachewrapper.hytale.boot.HytaleBootPlugin"
+            id = "rankedproject.hytale.boot"
+            implementationClass = "net.rankedproject.hytale.boot.HytaleBootPlugin"
         }
     }
 }
@@ -23,7 +23,6 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation(localGroovy())
 
     implementation("net.lingala.zip4j:zip4j:2.11.6")
     implementation("org.apache.commons:commons-lang3:3.20.0")

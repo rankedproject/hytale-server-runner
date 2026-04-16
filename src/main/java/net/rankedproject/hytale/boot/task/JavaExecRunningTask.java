@@ -6,8 +6,20 @@ import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.TaskAction;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Base class for tasks that launch the Hytale server process.
+ * * <p>Typically used as a <b>Global Task</b>. It ensures that all
+ * preparation logic in {@link #run()} is completed before the
+ * external Java process is started.
+ */
 public abstract class JavaExecRunningTask extends JavaExec implements GradleRunningTask {
 
+    /**
+     * Entry point for Gradle execution.
+     * <p>
+     * Runs the local task logic first, then calls the superclass
+     * to spawn the Java Virtual Machine.
+     */
     @TaskAction
     @Override
     public final void exec() {
@@ -15,8 +27,12 @@ public abstract class JavaExecRunningTask extends JavaExec implements GradleRunn
         super.exec();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @Internal
-    protected @NotNull HytaleBootExtension getHytaleBootExtension() {
+    public @NotNull HytaleBootExtension getHytaleBootExtension() {
         return getProject().getExtensions().getByType(HytaleBootExtension.class);
     }
 }

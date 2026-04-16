@@ -2,8 +2,8 @@ package net.rankedproject.hytale.boot.resource;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import net.rankedproject.hytale.boot.extension.HytaleExtensionParameters;
 import org.gradle.api.services.BuildService;
-import org.gradle.api.services.BuildServiceParameters;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -11,14 +11,31 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Base build service for acquiring external resources.
+ * <p>
+ * Uses a sealed hierarchy to strictly control how resources are fetched.
+ * Provides a fluent {@link ResourceRequest.Builder} to construct resource requests.
+ */
 public abstract sealed class ResourceProvider
-        implements BuildService<BuildServiceParameters.None>
+        implements BuildService<HytaleExtensionParameters>
         permits HttpResourceProvider {
 
+    /**
+     * Creates a new builder for a resource acquisition request.
+     *
+     * @return a fluent builder instance
+     */
     public @NotNull ResourceProvider.ResourceRequest.Builder builder() {
         return ResourceRequest.builder(this);
     }
 
+    /**
+     * Core logic for fulfilling a resource request.
+     *
+     * @param request the details of the resource to fetch
+     * @return a future that completes when the resource is stored locally
+     */
     protected abstract @NotNull CompletableFuture<Void> provide(@NotNull ResourceProvider.ResourceRequest request);
 
     protected record ResourceRequest(

@@ -10,6 +10,12 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.services.ServiceReference;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Step that resolves and downloads all configured mods.
+ * <p>
+ * Utilizes the {@link ModDownloaderStrategyRegistry} to fetch
+ * mod dependencies from their respective sources.
+ */
 public abstract class DownloadModStep extends StepDefault {
 
     @Override

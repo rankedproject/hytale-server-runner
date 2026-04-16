@@ -14,6 +14,12 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 
+/**
+ * Initial preparation step for acquiring Hytale server components.
+ * <p>
+ * Downloads and extracts the core downloader utility if the
+ * server software is not already present.
+ */
 public abstract class PrepareDownloaderStep extends StepDefault {
 
     @Override

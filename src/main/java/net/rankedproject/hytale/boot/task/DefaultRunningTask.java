@@ -6,15 +6,29 @@ import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Base class for tasks running entirely within the Gradle process.
+ * <p>
+ * Serves as the foundation for <b>Internal</b> worker tasks or
+ * <b>Global</b> tasks that handle file management, updates, or
+ * environment setup without booting a server.
+ */
 public abstract class DefaultRunningTask extends DefaultTask implements GradleRunningTask {
 
+    /**
+     * Entry point for Gradle execution.
+     */
     @TaskAction
     public void runTask() {
         run();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @Internal
-    protected @NotNull HytaleBootExtension getHytaleBootExtension() {
+    public @NotNull HytaleBootExtension getHytaleBootExtension() {
         return getProject().getExtensions().getByType(HytaleBootExtension.class);
     }
 }

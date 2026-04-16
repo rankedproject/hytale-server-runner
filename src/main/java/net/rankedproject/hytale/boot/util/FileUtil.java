@@ -10,9 +10,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * Utility class for file and directory operations.
+ * <p>
+ * Provides helper methods for extracting archives and managing
+ * the cleanup of server files and directories.
+ */
 @UtilityClass
 public final class FileUtil {
 
+    /**
+     * Extracts a ZIP file to the specified destination and deletes the source archive.
+     *
+     * @param zip             source zip file
+     * @param destinationPath directory to extract files into
+     */
     public void unpackZipFile(final @NotNull File zip, final @NotNull File destinationPath) {
         try (final ZipFile zipFile = new ZipFile(zip)) {
             zipFile.extractAll(destinationPath.getAbsolutePath());
@@ -22,6 +34,12 @@ public final class FileUtil {
         }
     }
 
+    /**
+     * Deletes a specific file within a directory if it exists.
+     *
+     * @param directory parent directory
+     * @param fileName  name of the file to remove
+     */
     @SneakyThrows
     public void deleteFile(final @NotNull File directory, final @NotNull String fileName) {
         final File file = new File(directory, fileName);
@@ -30,10 +48,21 @@ public final class FileUtil {
         }
     }
 
+    /**
+     * Deletes multiple files within a directory by name.
+     *
+     * @param directory parent directory
+     * @param fileNames names of the files to remove
+     */
     public void deleteFiles(final @NotNull File directory, final @NotNull String... fileNames) {
         Arrays.asList(fileNames).forEach(fileName -> deleteFile(directory, fileName));
     }
 
+    /**
+     * Recursively deletes a directory and all of its contents.
+     *
+     * @param directory directory to remove
+     */
     @SneakyThrows
     public void deleteDirectory(final @NotNull File directory) {
         if (directory.exists()) {

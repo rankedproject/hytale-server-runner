@@ -10,8 +10,15 @@ import org.gradle.api.tasks.SourceSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The terminal step that starts the Hytale server process.
+ * <p>
+ * Configures the JVM classpath, main class, and working directory
+ * based on the {@link HytaleBootExtension}.
+ */
 public abstract class LaunchServerStep extends StepExec {
 
     @Override
@@ -38,6 +45,7 @@ public abstract class LaunchServerStep extends StepExec {
 
         setWorkingDir(bootExtension.getServerDirectory());
         setStandardInput(System.in);
+        environment(bootExtension.getEnvironment().getOrElse(new HashMap<>()));
 
         setArgs(List.of("--assets=" + bootExtension.getAssets().get().getAbsolutePath()));
         jvmArgs(bootExtension.getJvmArgs().getOrElse(new ArrayList<>()));

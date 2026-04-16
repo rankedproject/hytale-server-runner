@@ -11,6 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.io.File;
 
+/**
+ * Step that executes the native Hytale downloader binary.
+ * <p>
+ * Identifies the host OS to run the correct executable and
+ * extracts the resulting server assets into the run directory.
+ */
 public abstract class DownloadServerAssetStep extends StepDefault {
 
     private static final String SERVER_ZIP_FILE = "hytale-server.zip";

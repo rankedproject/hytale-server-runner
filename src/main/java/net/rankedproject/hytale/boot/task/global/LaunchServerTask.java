@@ -10,8 +10,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * The primary execution task for booting a Hytale server.
+ * <p>
+ * This task orchestrates a multi-step pipeline that prepares the
+ * environment, verifies and downloads missing dependencies (assets and mods),
+ * and finally executes the server process.
+ */
 public abstract class LaunchServerTask extends GlobalRunningTask {
 
+    /**
+     * Defines the sequential boot pipeline.
+     *
+     * @return an ordered list of steps required to reach a running server state.
+     */
     @Override
     public @NotNull List<Class<? extends Step>> steps() {
         return List.of(

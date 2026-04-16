@@ -2,20 +2,37 @@ package net.rankedproject.hytale.boot.mod.strategy;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import net.rankedproject.hytale.boot.HytaleBootExtension;
+import net.rankedproject.hytale.boot.extension.HytaleExtensionParameters;
 import net.rankedproject.hytale.boot.mod.Mod;
-import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.services.BuildService;
-import org.gradle.api.services.BuildServiceParameters;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+/**
+ * Base strategy for downloading and installing Hytale mods.
+ * <p>
+ * As a {@link BuildService}, it has access to global project parameters.
+ * It enforces a "check-before-download" workflow to ensure mods are
+ * only fetched if they are missing from the local environment.
+ *
+ * @param <M> the specific type of Mod this strategy handles
+ */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ModDownloaderStrategy<M extends Mod>
-        implements BuildService<ModDownloaderStrategy.ModDownloaderStrategyParameters> {
+public abstract class ModDownloaderStrategy<M extends Mod> implements BuildService<HytaleExtensionParameters> {
 
+    /**
+     * Orchestrates the installation of a mod.
+     * Checks for the mod's existence on disk before triggering
+     * the implementation-specific {@link #download(Mod)} method.
+     *
+     * @param mod the mod definition to process
+     */
     public void downloadMod(final @NotNull M mod) {
-        final File modsDirectory = getParameters().getModDirectory().get().getAsFile();
+        final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
+        final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
+
         if (!modsDirectory.exists()) {
             modsDirectory.mkdirs();
         }
@@ -28,13 +45,16 @@ public abstract class ModDownloaderStrategy<M extends Mod>
     }
 
     protected boolean isModInstalled(final @NotNull String identifier) {
-        final File modsDirectory = getParameters().getModDirectory().get().getAsFile();
+        final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
+        final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
+
         return new File(modsDirectory, identifier).exists();
     }
 
+    /**
+     * Implementation-specific logic to acquire the mod file.
+     *
+     * @param mod the mod definition
+     */
     protected abstract void download(@NotNull M mod);
-
-    public interface ModDownloaderStrategyParameters extends BuildServiceParameters {
-        @NotNull DirectoryProperty getModDirectory();
-    }
 }

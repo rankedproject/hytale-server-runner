@@ -1,12 +1,23 @@
 package net.rankedproject.hytale.boot.step;
 
 import lombok.Builder;
-import org.gradle.api.Task;
+import net.rankedproject.hytale.boot.task.GradleRunningTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Step extends Task {
+/**
+ * Represents an atomic unit of work within a boot lifecycle.
+ * <p>
+ * Steps wrap logic into a {@link Options} record, allowing for
+ * standardized execution of setup ("start") and cleanup ("stop") logic.
+ */
+public interface Step extends GradleRunningTask {
 
+    /**
+     * Standard execution flow for the step.
+     * <p>
+     * Runs the start logic, followed by the optional stop logic.
+     */
     default void runStep() {
         final Step.Options options = options();
         options.startStep.run();
@@ -17,8 +28,17 @@ public interface Step extends Task {
         }
     }
 
+    /**
+     * @return the configuration options for this step's execution
+     */
     @NotNull Step.Options options();
 
+    /**
+     * Configuration for step execution.
+     *
+     * @param startStep the primary logic to execute
+     * @param stopStep  optional logic to execute after the startStep (cleanup)
+     */
     @Builder
     record Options(
             @NotNull Runnable startStep,

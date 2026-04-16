@@ -10,8 +10,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Task for performing a clean update of the Hytale server environment.
+ * <p>
+ * Unlike the launch task, this orchestrator begins by purging existing
+ * server assets and configuration to ensure a fresh installation before
+ * re-downloading the core software and mods.
+ */
 public abstract class UpdateServerTask extends GlobalRunningTask {
 
+    /**
+     * Defines the sequential update pipeline.
+     *
+     * @return an ordered list of steps including environment purging
+     * and dependency re-acquisition.
+     */
     @Override
     public @NotNull List<Class<? extends Step>> steps() {
         return List.of(
