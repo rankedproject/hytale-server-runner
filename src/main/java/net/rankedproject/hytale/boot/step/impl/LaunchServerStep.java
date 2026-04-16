@@ -1,5 +1,6 @@
 package net.rankedproject.hytale.boot.step.impl;
 
+import com.google.common.net.HostAndPort;
 import lombok.SneakyThrows;
 import net.rankedproject.hytale.boot.HytaleBootExtension;
 import net.rankedproject.hytale.boot.step.Step;
@@ -9,8 +10,7 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.net.InetSocketAddress;
 import java.util.List;
 
 /**
@@ -45,9 +45,15 @@ public abstract class LaunchServerStep extends StepExec {
 
         setWorkingDir(bootExtension.getServerDirectory());
         setStandardInput(System.in);
-        environment(bootExtension.getEnvironment().getOrElse(new HashMap<>()));
+        environment(bootExtension.getEnvironment().get());
+        jvmArgs(bootExtension.getJvmArgs().get());
 
-        setArgs(List.of("--assets=" + bootExtension.getAssets().get().getAbsolutePath()));
-        jvmArgs(bootExtension.getJvmArgs().getOrElse(new ArrayList<>()));
+        final InetSocketAddress address = bootExtension.getServerAddress().get();
+        final String serverAddress = HostAndPort.fromParts(address.getHostName(), address.getPort()).toString();
+        setArgs(List.of(
+                "--assets=" + bootExtension.getAssets().get().getAbsolutePath(),
+                "--auth-mode=" + bootExtension.getServerOnlineMode().get().getOnlineMode(),
+                "-bind=" + serverAddress
+        ));
     }
 }

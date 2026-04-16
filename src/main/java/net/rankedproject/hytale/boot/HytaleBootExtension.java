@@ -14,7 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.Serializable;
+import java.net.InetSocketAddress;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Main configuration extension for the Hytale Boot plugin.
@@ -41,6 +44,10 @@ public abstract class HytaleBootExtension implements Serializable {
      */
     public void environment(final @NotNull String identifier, final @NotNull Object value) {
         getEnvironment().put(identifier, value);
+    }
+
+    public void serverAddress(final @NotNull String host, final int port) {
+        getServerAddress().set(new InetSocketAddress(host, port));
     }
 
     /**
@@ -95,6 +102,16 @@ public abstract class HytaleBootExtension implements Serializable {
      */
     public abstract @NotNull ListProperty<String> getJvmArgs();
 
+    /**
+     * Property which allows to change the server online mode.
+     */
+    public abstract @NotNull Property<OnlineMode> getServerOnlineMode();
+
+    /**
+     * The InetSocketAddress to which the server will be bound
+     */
+    public abstract @NotNull Property<InetSocketAddress> getServerAddress();
+
     @Inject
     public HytaleBootExtension(final @NotNull ProjectLayout layout) {
         getRunDirectory().convention(layout.getProjectDirectory().dir("run"));
@@ -104,5 +121,9 @@ public abstract class HytaleBootExtension implements Serializable {
         getAssets().convention(getRunDirectory().file("Assets.zip").map(RegularFile::getAsFile));
         getServerDownloadUri().convention(URI.create("https://downloader.hytale.com/hytale-downloader.zip"));
         getServerJarMainClass().convention("com.hypixel.hytale.Main");
+        getServerOnlineMode().convention(OnlineMode.AUTHENTICATED);
+        getServerAddress().convention(new InetSocketAddress("0.0.0.0", 5520));
+        getJvmArgs().convention(new ArrayList<>());
+        getEnvironment().convention(new HashMap<>());
     }
 }
