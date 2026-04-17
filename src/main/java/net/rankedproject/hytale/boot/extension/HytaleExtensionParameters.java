@@ -3,7 +3,7 @@ package net.rankedproject.hytale.boot.extension;
 import net.rankedproject.hytale.boot.HytaleBootExtension;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.BuildServiceParameters;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Common parameter definition for Hytale-related Build Services.
@@ -19,5 +19,5 @@ public interface HytaleExtensionParameters extends BuildServiceParameters {
      *
      * @return a lazy property containing the boot extension
      */
-    @NotNull Property<HytaleBootExtension> getHytaleBootExtension();
+    @NonNull Property<HytaleBootExtension> getHytaleBootExtension();
 }

@@ -6,6 +6,7 @@ guava = "33.5.0-jre"
 lombok = "1.18.44"
 checkstyle = "12.1.2"
 stylecheck = "0.2.1"
+jspecify = "1.0.0"
 
 [libraries]
 zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
@@ -14,3 +15,4 @@ apache-commons-compress = { module = "org.apache.commons:commons-compress", vers
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 stylecheck = { module = "ca.stellardrift:stylecheck", version.ref = "stylecheck" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify"}

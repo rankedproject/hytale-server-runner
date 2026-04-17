@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public final class FileUtil {
      * @param zip             source zip file
      * @param destinationPath directory to extract files into
      */
-    public void unpackZipFile(final @NotNull File zip, final @NotNull File destinationPath) {
+    public void unpackZipFile(final @NonNull File zip, final @NonNull File destinationPath) {
         try (ZipFile zipFile = new ZipFile(zip)) {
             zipFile.extractAll(destinationPath.getAbsolutePath());
             zipFile.getFile().delete();
@@ -41,7 +41,7 @@ public final class FileUtil {
      * @param fileName  name of the file to remove
      */
     @SneakyThrows
-    public void deleteFile(final @NotNull File directory, final @NotNull String fileName) {
+    public void deleteFile(final @NonNull File directory, final @NonNull String fileName) {
         final File file = new File(directory, fileName);
         if (file.exists()) {
             FileUtils.forceDelete(file);
@@ -54,7 +54,7 @@ public final class FileUtil {
      * @param directory parent directory
      * @param fileNames names of the files to remove
      */
-    public void deleteFiles(final @NotNull File directory, final @NotNull String... fileNames) {
+    public void deleteFiles(final @NonNull File directory, final @NonNull String... fileNames) {
         Arrays.asList(fileNames).forEach(fileName -> deleteFile(directory, fileName));
     }
 
@@ -64,7 +64,7 @@ public final class FileUtil {
      * @param directory directory to remove
      */
     @SneakyThrows
-    public void deleteDirectory(final @NotNull File directory) {
+    public void deleteDirectory(final @NonNull File directory) {
         if (directory.exists()) {
             FileUtils.forceDelete(directory);
         }

@@ -4,7 +4,7 @@ import net.rankedproject.hytale.boot.HytaleBootExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Base class for tasks running entirely within the Gradle process.
@@ -28,7 +28,7 @@ public abstract class DefaultRunningTask extends DefaultTask implements GradleRu
      */
     @Internal
     @Override
-    public final @NotNull HytaleBootExtension getHytaleBootExtension() {
+    public final @NonNull HytaleBootExtension getHytaleBootExtension() {
         return getProject().getExtensions().getByType(HytaleBootExtension.class);
     }
 }

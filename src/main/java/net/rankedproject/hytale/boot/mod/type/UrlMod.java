@@ -2,7 +2,7 @@ package net.rankedproject.hytale.boot.mod.type;
 
 import lombok.Getter;
 import net.rankedproject.hytale.boot.mod.Mod;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.net.URI;
 
@@ -26,7 +26,7 @@ public class UrlMod extends Mod {
      * @param fileName normalized name of the file to save
      * @param uri      source location
      */
-    protected UrlMod(final @NotNull String fileName, final @NotNull URI uri) {
+    protected UrlMod(final @NonNull String fileName, final @NonNull URI uri) {
         super(fileName);
         this.uri = uri;
     }
@@ -38,7 +38,7 @@ public class UrlMod extends Mod {
      * @param fileName the desired local file name
      * @return a new UrlMod instance
      */
-    public static @NotNull UrlMod of(final @NotNull String url, final @NotNull String fileName) {
+    public static @NonNull UrlMod of(final @NonNull String url, final @NonNull String fileName) {
         return new UrlMod(Mod.normalizeFileName(fileName), URI.create(url));
     }
 
@@ -49,7 +49,7 @@ public class UrlMod extends Mod {
      * @param fileName the desired local file name
      * @return a new UrlMod instance
      */
-    public static @NotNull UrlMod of(final @NotNull URI uri, final @NotNull String fileName) {
+    public static @NonNull UrlMod of(final @NonNull URI uri, final @NonNull String fileName) {
         return new UrlMod(Mod.normalizeFileName(fileName), uri);
     }
 }

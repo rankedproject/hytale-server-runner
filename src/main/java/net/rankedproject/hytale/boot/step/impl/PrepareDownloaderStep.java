@@ -7,11 +7,10 @@ import net.rankedproject.hytale.boot.util.FileUtil;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.ServiceReference;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.net.URI;
-import java.time.Duration;
 
 /**
  * Initial preparation step for acquiring Hytale server components.
@@ -22,7 +21,7 @@ import java.time.Duration;
 public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
     @Override
-    public final @NotNull Options options() {
+    public final @NonNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();
@@ -55,5 +54,5 @@ public abstract class PrepareDownloaderStep extends TaskStepDefault {
     }
 
     @ServiceReference("httpResourceProvider")
-    protected abstract @NotNull Property<HttpResourceProvider> getResourceProvider();
+    protected abstract @NonNull Property<HttpResourceProvider> getResourceProvider();
 }

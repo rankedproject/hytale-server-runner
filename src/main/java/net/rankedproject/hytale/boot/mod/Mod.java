@@ -3,7 +3,7 @@ package net.rankedproject.hytale.boot.mod;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public abstract class Mod implements Serializable {
      * @param fileName the raw file name string
      * @return the normalized file name ending in ".jar"
      */
-    protected static @NotNull String normalizeFileName(final @NotNull String fileName) {
+    protected static @NonNull String normalizeFileName(final @NonNull String fileName) {
         return fileName.endsWith(".jar") ? fileName : fileName + ".jar";
     }
 }

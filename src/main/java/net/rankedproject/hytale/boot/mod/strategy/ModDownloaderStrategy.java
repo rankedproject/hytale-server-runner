@@ -8,7 +8,7 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.services.BuildService;
 import org.gradle.workers.WorkAction;
 import org.gradle.workers.WorkParameters;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 
@@ -25,6 +25,12 @@ import java.io.File;
 public abstract class ModDownloaderStrategy<M extends Mod>
         implements WorkAction<ModDownloaderStrategy.ModDownloaderExtension> {
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method is marked final to ensure the "check-before-download"
+     * workflow remains consistent across all strategy implementations.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public void execute() {
@@ -39,7 +45,7 @@ public abstract class ModDownloaderStrategy<M extends Mod>
      *
      * @param mod the mod definition to process
      */
-    public final void downloadMod(final @NotNull M mod) {
+    public final void downloadMod(final @NonNull M mod) {
         final HytaleBootExtension hytaleBootExtension = this.getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 
@@ -60,7 +66,7 @@ public abstract class ModDownloaderStrategy<M extends Mod>
      * @param identifier the file name or identifier of the mod to check
      * @return {@code true} if the mod file exists on disk, {@code false} otherwise
      */
-    protected boolean isModInstalled(final @NotNull String identifier) {
+    protected boolean isModInstalled(final @NonNull String identifier) {
         final HytaleBootExtension hytaleBootExtension = this.getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 
@@ -72,12 +78,25 @@ public abstract class ModDownloaderStrategy<M extends Mod>
      *
      * @param mod the mod definition
      */
-    protected abstract void download(@NotNull M mod);
+    protected abstract void download(@NonNull M mod);
 
+    /**
+     * Parameters for the mod downloader work action.
+     */
     public interface ModDownloaderExtension extends WorkParameters {
 
-        @NotNull Property<HytaleBootExtension> getHytaleBootExtension();
+        /**
+         * The Hytale boot configuration extension.
+         *
+         * @return the boot extension property
+         */
+        @NonNull Property<HytaleBootExtension> getHytaleBootExtension();
 
-        @NotNull Property<Mod> getMod();
+        /**
+         * The mod instance to be downloaded.
+         *
+         * @return the mod property
+         */
+        @NonNull Property<Mod> getMod();
     }
 }

@@ -5,7 +5,7 @@ import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import net.rankedproject.hytale.boot.util.FileUtil;
 import org.apache.commons.lang3.SystemUtils;
 import org.gradle.process.ExecOperations;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -24,7 +24,7 @@ public abstract class DownloadServerAssetStep extends TaskStepDefault {
     private static final String LINUX_EXECUTABLE_FILE = "hytale-downloader-linux-amd64";
 
     @Override
-    public final @NotNull Options options() {
+    public final @NonNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();
@@ -55,5 +55,5 @@ public abstract class DownloadServerAssetStep extends TaskStepDefault {
     }
 
     @Inject
-    protected abstract @NotNull ExecOperations getExecOperations();
+    protected abstract @NonNull ExecOperations getExecOperations();
 }

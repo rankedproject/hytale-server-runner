@@ -1,6 +1,6 @@
 package net.rankedproject.hytale.boot.registrar;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Generic interface for registering plugin components.
@@ -15,5 +15,5 @@ public interface Registrar<C> {
      * @param identifier unique name or ID for the component
      * @param valueClass the class implementation to register
      */
-    void register(@NotNull String identifier, @NotNull Class<? extends C> valueClass);
+    void register(@NonNull String identifier, @NonNull Class<? extends C> valueClass);
 }

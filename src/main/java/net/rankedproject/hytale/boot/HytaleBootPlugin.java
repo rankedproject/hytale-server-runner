@@ -7,7 +7,7 @@ import net.rankedproject.hytale.boot.task.global.LaunchServerTask;
 import net.rankedproject.hytale.boot.task.global.UpdateServerTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public abstract class HytaleBootPlugin implements Plugin<Project> {
     public static final String PLUGIN_GROUP = "hytaleBoot";
 
     @Override
-    public final void apply(final @NotNull Project project) {
+    public final void apply(final @NonNull Project project) {
         project.getExtensions().create(PLUGIN_GROUP, HytaleBootExtension.class, project.getLayout());
         serviceSetup(project);
         taskSetup(project);
@@ -34,7 +34,7 @@ public abstract class HytaleBootPlugin implements Plugin<Project> {
      *
      * @param project current project instance
      */
-    private void serviceSetup(final @NotNull Project project) {
+    private void serviceSetup(final @NonNull Project project) {
         final GradleServiceRegistrar serviceRegistrar = new GradleServiceRegistrar(project);
         serviceRegistrar.register("httpResourceProvider", HttpResourceProvider.class);
     }
@@ -47,7 +47,7 @@ public abstract class HytaleBootPlugin implements Plugin<Project> {
      *
      * @param project current project instance
      */
-    private void taskSetup(final @NotNull Project project) {
+    private void taskSetup(final @NonNull Project project) {
         final GlobalTaskRegistrar taskRegistrar = new GlobalTaskRegistrar(project);
         taskRegistrar.register("launchServer", LaunchServerTask.class);
         taskRegistrar.register("updateServer", UpdateServerTask.class);

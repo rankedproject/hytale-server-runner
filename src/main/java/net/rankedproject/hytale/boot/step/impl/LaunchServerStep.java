@@ -7,7 +7,7 @@ import net.rankedproject.hytale.boot.step.type.TaskStepExec;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 public abstract class LaunchServerStep extends TaskStepExec {
 
     @Override
-    public final @NotNull Options options() {
+    public final @NonNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();

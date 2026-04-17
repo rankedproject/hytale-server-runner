@@ -9,7 +9,7 @@ import net.rankedproject.hytale.boot.mod.type.GithubMod;
 import net.rankedproject.hytale.boot.mod.type.UrlMod;
 import org.gradle.workers.WorkQueue;
 import org.gradle.workers.WorkerExecutor;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +34,7 @@ public final class ModDownloader {
      *
      * @param mods the collection of mods defined in the build script
      */
-    public void download(final @NotNull List<? extends Mod> mods) {
+    public void download(final @NonNull List<? extends Mod> mods) {
         mods.forEach(this::downloadMod);
     }
 
@@ -44,7 +44,7 @@ public final class ModDownloader {
      * @param mod the mod instance to process
      * @param <M> the specific implementation type of the Mod
      */
-    private <M extends Mod> void downloadMod(final @NotNull M mod) {
+    private <M extends Mod> void downloadMod(final @NonNull M mod) {
         final Class<? extends Mod> modeType = mod.getClass();
         final Class<? extends ModDownloaderStrategy<M>> downloader = ModDownloaderStrategyRegistry.getDownloader(modeType);
 
@@ -82,8 +82,8 @@ public final class ModDownloader {
          * @throws NullPointerException if no strategy is registered for the given type
          */
         @SuppressWarnings("unchecked")
-        public static <M extends Mod> @NotNull Class<? extends ModDownloaderStrategy<M>> getDownloader(
-                final @NotNull Class<? extends Mod> modType
+        public static <M extends Mod> @NonNull Class<? extends ModDownloaderStrategy<M>> getDownloader(
+                final @NonNull Class<? extends Mod> modType
         ) {
             return (Class<? extends ModDownloaderStrategy<M>>) DOWNLOADER_STRATEGY.get(modType);
         }

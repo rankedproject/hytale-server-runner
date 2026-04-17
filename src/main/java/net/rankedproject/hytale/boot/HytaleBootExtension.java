@@ -9,7 +9,7 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Nested;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -34,7 +34,7 @@ public abstract class HytaleBootExtension implements Serializable {
      *
      * @param action configuration block for mods
      */
-    public void mods(final @NotNull Action<? super ModExtension> action) {
+    public void mods(final @NonNull Action<? super ModExtension> action) {
         action.execute(this.getModExtension());
     }
 
@@ -44,7 +44,7 @@ public abstract class HytaleBootExtension implements Serializable {
      * @param identifier variable name
      * @param value      variable value
      */
-    public void environment(final @NotNull String identifier, final @NotNull Object value) {
+    public void environment(final @NonNull String identifier, final @NonNull Object value) {
         this.getEnvironment().put(identifier, value);
     }
 
@@ -57,7 +57,7 @@ public abstract class HytaleBootExtension implements Serializable {
      * @param host the hostname or IP address to bind to (e.g., "0.0.0.0")
      * @param port the port number (e.g., 5520)
      */
-    public void serverAddress(final @NotNull String host, final int port) {
+    public void serverAddress(final @NonNull String host, final int port) {
         this.getServerAddress().set(new InetSocketAddress(host, port));
     }
 
@@ -67,87 +67,94 @@ public abstract class HytaleBootExtension implements Serializable {
      * @return the nested mod configuration extension
      */
     @Nested
-    public abstract @NotNull ModExtension getModExtension();
+    public abstract @NonNull ModExtension getModExtension();
 
     /**
      * Map of environment variables passed to the server process.
      *
      * @return the property containing environment variables
      */
-    public abstract @NotNull MapProperty<String, Object> getEnvironment();
+    public abstract @NonNull MapProperty<String, Object> getEnvironment();
 
     /**
      * Directory where the Hytale server files are located.
      *
      * @return the property containing the server directory
      */
-    public abstract @NotNull DirectoryProperty getServerDirectory();
+    public abstract @NonNull DirectoryProperty getServerDirectory();
 
     /**
      * Root directory for server execution.
      *
      * @return the property containing the run directory
      */
-    public abstract @NotNull DirectoryProperty getRunDirectory();
+    public abstract @NonNull DirectoryProperty getRunDirectory();
 
     /**
      * Directory where server mods will be installed.
      *
      * @return the property containing the mods directory
      */
-    public abstract @NotNull DirectoryProperty getModDirectory();
+    public abstract @NonNull DirectoryProperty getModDirectory();
 
     /**
      * File property for the server assets archive.
      *
      * @return the property containing the assets file
      */
-    public abstract @NotNull Property<File> getAssets();
+    public abstract @NonNull Property<File> getAssets();
 
     /**
      * URI used to download the server software.
      *
      * @return the property containing the server download URI
      */
-    public abstract @NotNull Property<URI> getServerDownloadUri();
+    public abstract @NonNull Property<URI> getServerDownloadUri();
 
     /**
      * The primary executable JAR file for the server.
      *
      * @return the property containing the server JAR file
      */
-    public abstract @NotNull Property<File> getServerJar();
+    public abstract @NonNull Property<File> getServerJar();
 
     /**
      * The entry point class name for the Hytale server.
      *
      * @return the property containing the server main class name
      */
-    public abstract @NotNull Property<String> getServerJarMainClass();
+    public abstract @NonNull Property<String> getServerJarMainClass();
 
     /**
      * List of JVM arguments to pass to the server process.
      *
      * @return the property containing the list of JVM arguments
      */
-    public abstract @NotNull ListProperty<String> getJvmArgs();
+    public abstract @NonNull ListProperty<String> getJvmArgs();
 
     /**
      * Property which allows to change the server online mode.
      *
      * @return the property containing the server online mode
      */
-    public abstract @NotNull Property<OnlineMode> getServerOnlineMode();
+    public abstract @NonNull Property<OnlineMode> getServerOnlineMode();
 
     /**
      * The InetSocketAddress to which the server will be bound.
      *
      * @return the property containing the server bind address
      */
-    public abstract @NotNull Property<InetSocketAddress> getServerAddress();
+    public abstract @NonNull Property<InetSocketAddress> getServerAddress();
 
-
-    public abstract @NotNull Property<Duration> getDownloadTimeout();
+    /**
+     * The maximum amount of time allowed for download operations.
+     * <p>
+     * This timeout is applied when downloading server software or assets to prevent
+     * the build process from hanging indefinitely due to network issues.
+     *
+     * @return the property containing the download timeout duration
+     */
+    public abstract @NonNull Property<Duration> getDownloadTimeout();
 
     /**
      * Constructs a new HytaleBootExtension and sets default conventions.
@@ -155,7 +162,7 @@ public abstract class HytaleBootExtension implements Serializable {
      * @param layout the Gradle project layout used to resolve default paths
      */
     @Inject
-    public HytaleBootExtension(final @NotNull ProjectLayout layout) {
+    public HytaleBootExtension(final @NonNull ProjectLayout layout) {
         getRunDirectory().convention(layout.getProjectDirectory().dir("run"));
         getServerDirectory().convention(getRunDirectory().dir("Server"));
         getModDirectory().convention(getServerDirectory().dir("mods"));

@@ -7,7 +7,7 @@ import org.gradle.api.Project;
 import org.gradle.api.services.BuildService;
 import org.gradle.api.services.BuildServiceRegistry;
 import org.gradle.api.services.BuildServiceSpec;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Registrar responsible for configuring and providing Gradle Shared Build Services.
@@ -22,7 +22,7 @@ public final class GradleServiceRegistrar implements Registrar<BuildService<Hyta
     private final Project project;
     private final BuildServiceRegistry serviceRegistry;
 
-    public GradleServiceRegistrar(final @NotNull Project project) {
+    public GradleServiceRegistrar(final @NonNull Project project) {
         this.project = project;
         this.serviceRegistry = project.getGradle().getSharedServices();
     }
@@ -38,13 +38,13 @@ public final class GradleServiceRegistrar implements Registrar<BuildService<Hyta
      */
     @Override
     public void register(
-            final @NotNull String identifier,
-            final @NotNull Class<? extends BuildService<HytaleExtensionParameters>> buildService
+            final @NonNull String identifier,
+            final @NonNull Class<? extends BuildService<HytaleExtensionParameters>> buildService
     ) {
         this.serviceRegistry.registerIfAbsent(identifier, buildService, buildServiceSpec());
     }
 
-    private @NotNull Action<? super BuildServiceSpec<HytaleExtensionParameters>> buildServiceSpec() {
+    private @NonNull Action<? super BuildServiceSpec<HytaleExtensionParameters>> buildServiceSpec() {
         return serviceSpec -> {
             final HytaleBootExtension bootExtension = project.getExtensions().findByType(HytaleBootExtension.class);
             serviceSpec.getParameters().getHytaleBootExtension().set(bootExtension);

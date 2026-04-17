@@ -6,7 +6,7 @@ import net.rankedproject.hytale.boot.step.impl.DownloadServerAssetStep;
 import net.rankedproject.hytale.boot.step.impl.LaunchServerStep;
 import net.rankedproject.hytale.boot.step.impl.PrepareDownloaderStep;
 import net.rankedproject.hytale.boot.task.type.GlobalRunningTask;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public abstract class LaunchServerTask extends GlobalRunningTask {
      * @return an ordered list of steps required to reach a running server state.
      */
     @Override
-    public @NotNull List<Class<? extends TaskStep>> steps() {
+    public @NonNull List<Class<? extends TaskStep>> steps() {
         return List.of(
                 PrepareDownloaderStep.class,
                 DownloadServerAssetStep.class,

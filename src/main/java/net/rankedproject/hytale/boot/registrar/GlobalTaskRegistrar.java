@@ -5,7 +5,7 @@ import net.rankedproject.hytale.boot.step.TaskStepLoader;
 import net.rankedproject.hytale.boot.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskProvider;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Handles the registration and lifecycle setup of Global tasks.
@@ -21,14 +21,14 @@ public final class GlobalTaskRegistrar implements Registrar<GlobalRunningTask> {
 
     @Override
     public void register(
-            final @NotNull String name,
-            final @NotNull Class<? extends GlobalRunningTask> runningTask
+            final @NonNull String name,
+            final @NonNull Class<? extends GlobalRunningTask> runningTask
     ) {
         final TaskProvider<? extends GlobalRunningTask> taskProvider = project.getTasks().register(name, runningTask);
         configureTask(taskProvider);
     }
 
-    private void configureTask(final @NotNull TaskProvider<? extends GlobalRunningTask> taskProvider) {
+    private void configureTask(final @NonNull TaskProvider<? extends GlobalRunningTask> taskProvider) {
         final TaskStepLoader stepLoader = new TaskStepLoader(taskProvider.get(), this.project);
         stepLoader.setup();
     }

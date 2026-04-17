@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.rankedproject.hytale.boot.extension.HytaleExtensionParameters;
 import net.rankedproject.hytale.boot.resource.ResourceProvider.ResourceRequest.Builder;
 import org.gradle.api.services.BuildService;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.net.URI;
@@ -27,7 +27,7 @@ public abstract sealed class ResourceProvider
      *
      * @return a fluent builder instance
      */
-    public final @NotNull Builder builder() {
+    public final @NonNull Builder builder() {
         return ResourceRequest.builder(this);
     }
 
@@ -37,15 +37,15 @@ public abstract sealed class ResourceProvider
      * @param request the details of the resource to fetch
      * @return a future that completes when the resource is stored locally
      */
-    protected abstract @NotNull CompletableFuture<Void> provide(@NotNull ResourceRequest request);
+    protected abstract @NonNull CompletableFuture<Void> provide(@NonNull ResourceRequest request);
 
     protected record ResourceRequest(
-            @NotNull URI uri,
-            @NotNull File destinationFile,
-            @NotNull Duration timeout
+            @NonNull URI uri,
+            @NonNull File destinationFile,
+            @NonNull Duration timeout
     ) {
 
-        private static @NotNull Builder builder(final @NotNull ResourceProvider provider) {
+        private static @NonNull Builder builder(final @NonNull ResourceProvider provider) {
             return new ResourceRequest.Builder(provider);
         }
 
@@ -58,26 +58,26 @@ public abstract sealed class ResourceProvider
             private File destinationFile;
             private Duration timeout;
 
-            public @NotNull Builder uri(final @NotNull URI uri) {
+            public @NonNull Builder uri(final @NonNull URI uri) {
                 this.uri = uri;
                 return this;
             }
 
-            public @NotNull Builder destinationFile(final @NotNull File destinationFile) {
+            public @NonNull Builder destinationFile(final @NonNull File destinationFile) {
                 this.destinationFile = destinationFile;
                 return this;
             }
 
-            public @NotNull Builder timeout(final @NotNull Duration timeout) {
+            public @NonNull Builder timeout(final @NonNull Duration timeout) {
                 this.timeout = timeout;
                 return this;
             }
 
-            public @NotNull CompletableFuture<Void> provide() {
+            public @NonNull CompletableFuture<Void> provide() {
                 return this.provider.provide(build());
             }
 
-            private @NotNull ResourceRequest build() {
+            private @NonNull ResourceRequest build() {
                 return new ResourceRequest(this.uri, this.destinationFile, this.timeout);
             }
         }

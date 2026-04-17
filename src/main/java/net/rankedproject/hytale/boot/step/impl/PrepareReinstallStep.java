@@ -2,7 +2,7 @@ package net.rankedproject.hytale.boot.step.impl;
 
 import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import net.rankedproject.hytale.boot.util.FileUtil;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Step that wipes the current server installation.
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class PrepareReinstallStep extends TaskStepDefault {
 
     @Override
-    public final @NotNull Options options() {
+    public final @NonNull Options options() {
         return Options.builder()
                 .startStep(() -> FileUtil.deleteDirectory(getHytaleBootExtension().getRunDirectory().get().getAsFile()))
                 .build();

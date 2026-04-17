@@ -6,7 +6,7 @@ import net.rankedproject.hytale.boot.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Orchestrator that transforms a list of Step classes into a linked Gradle task chain.
@@ -41,7 +41,7 @@ public final class TaskStepLoader {
                 .ifPresent(this.runningTask::dependsOn);
     }
 
-    private @NotNull TaskProvider<?> register(final @NotNull Class<? extends TaskStep> step) {
+    private @NonNull TaskProvider<?> register(final @NonNull Class<? extends TaskStep> step) {
         final TaskContainer container = project.getTasks();
         return container.register(TaskLoaderUtil.newTaskIdentifier(this.runningTask, step), step);
     }
@@ -60,9 +60,9 @@ public final class TaskStepLoader {
          * @param step        the step class providing the sub-task name (simple class name)
          * @return the formatted task name, e.g., "globalTaskName_StepSimpleName"
          */
-        @NotNull String newTaskIdentifier(
-                final @NotNull GlobalRunningTask runningTask,
-                final @NotNull Class<? extends TaskStep> step
+        @NonNull String newTaskIdentifier(
+                final @NonNull GlobalRunningTask runningTask,
+                final @NonNull Class<? extends TaskStep> step
         ) {
             return STEP_TASK_IDENTIFIER_TEMPLATE.formatted(runningTask.getName(), step.getSimpleName());
         }

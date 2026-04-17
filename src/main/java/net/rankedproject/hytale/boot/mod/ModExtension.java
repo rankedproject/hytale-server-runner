@@ -4,7 +4,7 @@ import net.rankedproject.hytale.boot.mod.type.GithubMod;
 import net.rankedproject.hytale.boot.mod.type.UrlMod;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.tasks.Input;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Configuration extension for managing Hytale mods.
@@ -22,7 +22,7 @@ public abstract class ModExtension {
      * @return a property containing the collection of {@link Mod} instances
      */
     @Input
-    public abstract @NotNull ListProperty<Mod> getMods();
+    public abstract @NonNull ListProperty<Mod> getMods();
 
     /**
      * Adds a mod to the configuration via a direct download link.
@@ -30,7 +30,7 @@ public abstract class ModExtension {
      * @param url  the direct download URL for the mod file
      * @param file the name the file should be saved as locally
      */
-    public final void url(final @NotNull String url, final @NotNull String file) {
+    public final void url(final @NonNull String url, final @NonNull String file) {
         final UrlMod mod = UrlMod.of(url, file);
         getMods().add(mod);
     }
@@ -44,10 +44,10 @@ public abstract class ModExtension {
      * @param assetName  the name of the file attached to the release
      */
     public final void github(
-            final @NotNull String owner,
-            final @NotNull String repository,
-            final @NotNull String tag,
-            final @NotNull String assetName
+            final @NonNull String owner,
+            final @NonNull String repository,
+            final @NonNull String tag,
+            final @NonNull String assetName
     ) {
         final GithubMod mod = GithubMod.of(owner, repository, tag, assetName);
         getMods().add(mod);

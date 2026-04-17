@@ -4,7 +4,7 @@ import net.rankedproject.hytale.boot.HytaleBootExtension;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.TaskAction;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Base class for tasks that launch the Hytale server process.
@@ -32,7 +32,7 @@ public abstract class JavaExecRunningTask extends JavaExec implements GradleRunn
      */
     @Internal
     @Override
-    public final @NotNull HytaleBootExtension getHytaleBootExtension() {
+    public final @NonNull HytaleBootExtension getHytaleBootExtension() {
         return getProject().getExtensions().getByType(HytaleBootExtension.class);
     }
 }

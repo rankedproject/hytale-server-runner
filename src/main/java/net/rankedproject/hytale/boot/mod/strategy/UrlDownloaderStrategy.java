@@ -5,10 +5,9 @@ import net.rankedproject.hytale.boot.mod.type.UrlMod;
 import net.rankedproject.hytale.boot.resource.HttpResourceProvider;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.ServiceReference;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
-import java.time.Duration;
 
 /**
  * Strategy for downloading mods via direct HTTP/HTTPS requests.
@@ -25,7 +24,7 @@ public abstract class UrlDownloaderStrategy extends ModDownloaderStrategy<UrlMod
      * @param mod the URL-based mod definition
      */
     @Override
-    protected final void download(final @NotNull UrlMod mod) {
+    protected final void download(final @NonNull UrlMod mod) {
         final HytaleBootExtension hytaleBootExtension = getParameters().getHytaleBootExtension().get();
         final File modsDirectory = hytaleBootExtension.getModDirectory().get().getAsFile();
 
@@ -39,5 +38,5 @@ public abstract class UrlDownloaderStrategy extends ModDownloaderStrategy<UrlMod
     }
 
     @ServiceReference("httpResourceProvider")
-    protected abstract @NotNull Property<HttpResourceProvider> getResourceProvider();
+    protected abstract @NonNull Property<HttpResourceProvider> getResourceProvider();
 }

@@ -26,6 +26,7 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(libs.lombok)
 
+    implementation(libs.jspecify)
     implementation(libs.zip4j)
     implementation(libs.apache.commons.io)
     implementation(libs.apache.commons.compress)

@@ -3,7 +3,7 @@ package net.rankedproject.hytale.boot.task;
 import net.rankedproject.hytale.boot.HytaleBootExtension;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.Internal;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Root interface for all Hytale boot-related tasks.
@@ -30,5 +30,5 @@ public interface GradleRunningTask extends Task {
      * @return the active configuration extension
      */
     @Internal
-    @NotNull HytaleBootExtension getHytaleBootExtension();
+    @NonNull HytaleBootExtension getHytaleBootExtension();
 }

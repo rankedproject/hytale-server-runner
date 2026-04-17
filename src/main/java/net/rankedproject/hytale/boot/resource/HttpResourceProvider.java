@@ -1,7 +1,7 @@
 package net.rankedproject.hytale.boot.resource;
 
 import net.rankedproject.hytale.boot.HytaleBootPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.net.http.HttpClient;
@@ -28,7 +28,7 @@ public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
      * @return a future indicating completion or failure
      */
     @Override
-    protected final @NotNull CompletableFuture<Void> provide(final @NotNull ResourceRequest request) {
+    protected final @NonNull CompletableFuture<Void> provide(final @NonNull ResourceRequest request) {
         final HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(request.uri())
                 .GET()

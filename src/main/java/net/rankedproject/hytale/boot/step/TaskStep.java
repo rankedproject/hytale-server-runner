@@ -2,8 +2,8 @@ package net.rankedproject.hytale.boot.step;
 
 import lombok.Builder;
 import net.rankedproject.hytale.boot.task.GradleRunningTask;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an atomic unit of work within a boot lifecycle.
@@ -31,7 +31,7 @@ public interface TaskStep extends GradleRunningTask {
     /**
      * @return the configuration options for this step's execution
      */
-    @NotNull Options options();
+    @NonNull Options options();
 
     /**
      * Configuration for step execution.
@@ -41,7 +41,7 @@ public interface TaskStep extends GradleRunningTask {
      */
     @Builder
     record Options(
-            @NotNull Runnable startStep,
+            @NonNull Runnable startStep,
             @Nullable Runnable stopStep
     ) {
     }

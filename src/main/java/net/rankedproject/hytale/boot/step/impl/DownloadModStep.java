@@ -1,12 +1,11 @@
 package net.rankedproject.hytale.boot.step.impl;
 
-import net.rankedproject.hytale.boot.HytaleBootExtension;
 import net.rankedproject.hytale.boot.mod.Mod;
 import net.rankedproject.hytale.boot.mod.ModDownloader;
 import net.rankedproject.hytale.boot.step.type.TaskStepDefault;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.workers.WorkerExecutor;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import javax.inject.Inject;
 
@@ -18,7 +17,7 @@ import javax.inject.Inject;
 public abstract class DownloadModStep extends TaskStepDefault {
 
     @Override
-    public final @NotNull Options options() {
+    public final @NonNull Options options() {
         return Options.builder()
                 .startStep(this::startStep)
                 .build();
@@ -31,5 +30,5 @@ public abstract class DownloadModStep extends TaskStepDefault {
     }
 
     @Inject
-    protected abstract WorkerExecutor getWorkerExecutor();
+    protected abstract @NonNull WorkerExecutor getWorkerExecutor();
 }

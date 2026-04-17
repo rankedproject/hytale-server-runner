@@ -3,7 +3,7 @@ package net.rankedproject.hytale.boot.task.type;
 import net.rankedproject.hytale.boot.HytaleBootPlugin;
 import net.rankedproject.hytale.boot.step.TaskStep;
 import org.gradle.api.DefaultTask;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -28,5 +28,5 @@ public abstract class GlobalRunningTask extends DefaultTask {
      *
      * @return a list of step classes to be executed in order
      */
-    public abstract @NotNull List<Class<? extends TaskStep>> steps();
+    public abstract @NonNull List<Class<? extends TaskStep>> steps();
 }
