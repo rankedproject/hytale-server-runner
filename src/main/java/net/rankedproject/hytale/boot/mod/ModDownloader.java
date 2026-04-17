@@ -1,12 +1,19 @@
 package net.rankedproject.hytale.boot.mod;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import net.rankedproject.hytale.boot.mod.registry.ModDownloaderStrategyRegistry;
+import net.rankedproject.hytale.boot.HytaleBootExtension;
 import net.rankedproject.hytale.boot.mod.strategy.ModDownloaderStrategy;
-import org.gradle.api.provider.Property;
+import net.rankedproject.hytale.boot.mod.strategy.UrlDownloaderStrategy;
+import net.rankedproject.hytale.boot.mod.type.GithubMod;
+import net.rankedproject.hytale.boot.mod.type.UrlMod;
+import org.gradle.workers.WorkQueue;
+import org.gradle.workers.WorkerExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Execution context for processing mod downloads.
@@ -19,7 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public final class ModDownloader {
 
-    private final Property<ModDownloaderStrategyRegistry> downloaderStrategyRegistry;
+    private final HytaleBootExtension hytaleBootExtension;
+    private final WorkerExecutor workerExecutor;
 
     /**
      * Iterates through a list of mods and triggers the download process for each.
@@ -38,9 +46,47 @@ public final class ModDownloader {
      */
     private <M extends Mod> void downloadMod(final @NotNull M mod) {
         final Class<? extends Mod> modeType = mod.getClass();
-        final ModDownloaderStrategyRegistry modDownloaderStrategyRegistry = downloaderStrategyRegistry.get();
+        final Class<? extends ModDownloaderStrategy<M>> downloader = ModDownloaderStrategyRegistry.getDownloader(modeType);
 
-        final ModDownloaderStrategy<M> modDownloaderStrategy = modDownloaderStrategyRegistry.getDownloader(modeType);
-        modDownloaderStrategy.downloadMod(mod);
+        final WorkQueue workQueue = workerExecutor.noIsolation();
+        workQueue.submit(downloader, parameters -> {
+            parameters.getHytaleBootExtension().set(this.hytaleBootExtension);
+            parameters.getMod().set(mod);
+        });
     }
+
+    /**
+     * Registry service that manages the mapping between mod types and their download strategies.
+     * <p>
+     * This service acts as a central hub for resolving the correct {@link ModDownloaderStrategy}
+     * for any given {@link Mod} implementation. It is pre-configured with default strategies
+     * for URL and GitHub-based mods.
+     */
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private abstract static class ModDownloaderStrategyRegistry {
+
+        private static final Map<Class<? extends Mod>, Class<? extends ModDownloaderStrategy<?>>> DOWNLOADER_STRATEGY;
+
+        static {
+            DOWNLOADER_STRATEGY = new HashMap<>();
+            DOWNLOADER_STRATEGY.put(UrlMod.class, UrlDownloaderStrategy.class);
+            DOWNLOADER_STRATEGY.put(GithubMod.class, UrlDownloaderStrategy.class);
+        }
+
+        /**
+         * Retrieves the strategy associated with a specific mod implementation.
+         *
+         * @param modType the class of the mod being processed
+         * @param <M>     the specific mod type
+         * @return the downloader strategy capable of handling the specified mod type
+         * @throws NullPointerException if no strategy is registered for the given type
+         */
+        @SuppressWarnings("unchecked")
+        public static <M extends Mod> @NotNull Class<? extends ModDownloaderStrategy<M>> getDownloader(
+                final @NotNull Class<? extends Mod> modType
+        ) {
+            return (Class<? extends ModDownloaderStrategy<M>>) DOWNLOADER_STRATEGY.get(modType);
+        }
+    }
+
 }

@@ -1,7 +1,5 @@
 package net.rankedproject.hytale.boot;
 
-import net.rankedproject.hytale.boot.mod.registry.ModDownloaderStrategyRegistry;
-import net.rankedproject.hytale.boot.mod.strategy.UrlDownloaderStrategy;
 import net.rankedproject.hytale.boot.registrar.GlobalTaskRegistrar;
 import net.rankedproject.hytale.boot.registrar.GradleServiceRegistrar;
 import net.rankedproject.hytale.boot.resource.HttpResourceProvider;
@@ -39,8 +37,6 @@ public abstract class HytaleBootPlugin implements Plugin<Project> {
     private void serviceSetup(final @NotNull Project project) {
         final GradleServiceRegistrar serviceRegistrar = new GradleServiceRegistrar(project);
         serviceRegistrar.register("httpResourceProvider", HttpResourceProvider.class);
-        serviceRegistrar.register("modDownloaderStrategyRegistry", ModDownloaderStrategyRegistry.class);
-        serviceRegistrar.register("urlDownloaderStrategy", UrlDownloaderStrategy.class);
     }
 
     /**

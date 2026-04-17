@@ -3,9 +3,11 @@ package net.rankedproject.hytale.boot.mod.strategy;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.rankedproject.hytale.boot.HytaleBootExtension;
-import net.rankedproject.hytale.boot.extension.HytaleExtensionParameters;
 import net.rankedproject.hytale.boot.mod.Mod;
+import org.gradle.api.provider.Property;
 import org.gradle.api.services.BuildService;
+import org.gradle.workers.WorkAction;
+import org.gradle.workers.WorkParameters;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -20,7 +22,15 @@ import java.io.File;
  * @param <M> the specific type of Mod this strategy handles
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ModDownloaderStrategy<M extends Mod> implements BuildService<HytaleExtensionParameters> {
+public abstract class ModDownloaderStrategy<M extends Mod>
+        implements WorkAction<ModDownloaderStrategy.ModDownloaderExtension> {
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void execute() {
+        final M mod = (M) getParameters().getMod().get();
+        downloadMod(mod);
+    }
 
     /**
      * Orchestrates the installation of a mod.
@@ -37,7 +47,7 @@ public abstract class ModDownloaderStrategy<M extends Mod> implements BuildServi
             modsDirectory.mkdirs();
         }
 
-        if (this.isModInstalled(mod.getFileName())) {
+        if (isModInstalled(mod.getFileName())) {
             return;
         }
 
@@ -63,4 +73,11 @@ public abstract class ModDownloaderStrategy<M extends Mod> implements BuildServi
      * @param mod the mod definition
      */
     protected abstract void download(@NotNull M mod);
+
+    public interface ModDownloaderExtension extends WorkParameters {
+
+        @NotNull Property<HytaleBootExtension> getHytaleBootExtension();
+
+        @NotNull Property<Mod> getMod();
+    }
 }

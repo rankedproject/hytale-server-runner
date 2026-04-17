@@ -46,7 +46,7 @@ public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
         getResourceProvider().get().builder()
                 .uri(serverDownloadUri)
-                .timeout(Duration.ofSeconds(25))
+                .timeout(bootExtension.getDownloadTimeout().get())
                 .destinationFile(destinationFile)
                 .provide()
                 .join();

@@ -59,6 +59,7 @@ hytaleBoot {
     runDirectory.set(layout.projectDirectory.dir("run"))
     serverDirectory.set(layout.projectDirectory.dir("server"))
     modDirectory.set(layout.projectDirectory.dir("mods"))
+    downloadTimeout.set(Duration.ofSeconds(50))
 
     // Custom environment variables
     environment("databaseName", "mongodb-project")

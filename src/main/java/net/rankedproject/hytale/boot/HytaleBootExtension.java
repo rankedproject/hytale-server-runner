@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -145,6 +146,9 @@ public abstract class HytaleBootExtension implements Serializable {
      */
     public abstract @NotNull Property<InetSocketAddress> getServerAddress();
 
+
+    public abstract @NotNull Property<Duration> getDownloadTimeout();
+
     /**
      * Constructs a new HytaleBootExtension and sets default conventions.
      *
@@ -152,16 +156,17 @@ public abstract class HytaleBootExtension implements Serializable {
      */
     @Inject
     public HytaleBootExtension(final @NotNull ProjectLayout layout) {
-        this.getRunDirectory().convention(layout.getProjectDirectory().dir("run"));
-        this.getServerDirectory().convention(this.getRunDirectory().dir("Server"));
-        this.getModDirectory().convention(this.getServerDirectory().dir("mods"));
-        this.getServerJar().convention(this.getServerDirectory().file("HytaleServer.jar").map(RegularFile::getAsFile));
-        this.getAssets().convention(this.getRunDirectory().file("Assets.zip").map(RegularFile::getAsFile));
-        this.getServerDownloadUri().convention(URI.create("https://downloader.hytale.com/hytale-downloader.zip"));
-        this.getServerJarMainClass().convention("com.hypixel.hytale.Main");
-        this.getServerOnlineMode().convention(OnlineMode.AUTHENTICATED);
-        this.getServerAddress().convention(new InetSocketAddress("0.0.0.0", 5520));
-        this.getJvmArgs().convention(new ArrayList<>());
-        this.getEnvironment().convention(new HashMap<>());
+        getRunDirectory().convention(layout.getProjectDirectory().dir("run"));
+        getServerDirectory().convention(getRunDirectory().dir("Server"));
+        getModDirectory().convention(getServerDirectory().dir("mods"));
+        getServerJar().convention(getServerDirectory().file("HytaleServer.jar").map(RegularFile::getAsFile));
+        getAssets().convention(getRunDirectory().file("Assets.zip").map(RegularFile::getAsFile));
+        getServerDownloadUri().convention(URI.create("https://downloader.hytale.com/hytale-downloader.zip"));
+        getServerJarMainClass().convention("com.hypixel.hytale.Main");
+        getServerOnlineMode().convention(OnlineMode.AUTHENTICATED);
+        getServerAddress().convention(new InetSocketAddress("0.0.0.0", 5520));
+        getJvmArgs().convention(new ArrayList<>());
+        getEnvironment().convention(new HashMap<>());
+        getDownloadTimeout().set(Duration.ofSeconds(20));
     }
 }

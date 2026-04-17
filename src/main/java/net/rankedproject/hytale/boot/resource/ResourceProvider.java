@@ -56,7 +56,7 @@ public abstract sealed class ResourceProvider
 
             private URI uri;
             private File destinationFile;
-            private Duration timeout = Duration.ofSeconds(5);
+            private Duration timeout;
 
             public @NotNull Builder uri(final @NotNull URI uri) {
                 this.uri = uri;

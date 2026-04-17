@@ -33,7 +33,7 @@ public abstract class UrlDownloaderStrategy extends ModDownloaderStrategy<UrlMod
         getResourceProvider().get().builder()
                 .destinationFile(destinationFile)
                 .uri(mod.getUri())
-                .timeout(Duration.ofSeconds(15))
+                .timeout(hytaleBootExtension.getDownloadTimeout().get())
                 .provide()
                 .join();
     }
