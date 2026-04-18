@@ -21,7 +21,7 @@ Add the plugin to your `build.gradle.kts` (Kotlin) or `build.gradle` (Groovy) fi
 
 ```kotlin
 plugins {
-    id("wtf.ranked.hytale-server-runner") version "1.0"
+    id("wtf.ranked.hytale-server-runner") version "1.0.0"
 }
 ```
 
