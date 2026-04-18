@@ -29,30 +29,30 @@ public abstract class LaunchServerStep extends TaskStepExec {
 
     @SneakyThrows
     private void startStep() {
-        final HytalePluginExtension PluginExtension = getHytalePluginExtension();
+        final HytalePluginExtension pluginExtension = getHytalePluginExtension();
         final JavaPluginExtension javaExtension = getProject().getExtensions().getByType(JavaPluginExtension.class);
         final SourceSet sourceSet = javaExtension.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);
 
         final ConfigurableFileCollection runClasspath = getProject().getObjects().fileCollection();
         final ConfigurableFileCollection classpath = runClasspath.from(getProject().files(
-                PluginExtension.getServerJar(),
+                pluginExtension.getServerJar(),
                 sourceSet.getRuntimeClasspath()
         ));
 
         setClasspath(classpath);
-        getMainClass().set(PluginExtension.getServerJarMainClass());
+        getMainClass().set(pluginExtension.getServerJarMainClass());
 
-        setWorkingDir(PluginExtension.getServerDirectory());
+        setWorkingDir(pluginExtension.getServerDirectory());
         setStandardInput(System.in);
 
-        environment(PluginExtension.getEnvironment().get());
-        jvmArgs(PluginExtension.getJvmArgs().get());
+        environment(pluginExtension.getEnvironment().get());
+        jvmArgs(pluginExtension.getJvmArgs().get());
 
-        final InetSocketAddress address = PluginExtension.getServerAddress().get();
+        final InetSocketAddress address = pluginExtension.getServerAddress().get();
         final String serverAddress = HostAndPort.fromParts(address.getHostName(), address.getPort()).toString();
         setArgs(List.of(
-                "--assets=" + PluginExtension.getAssets().get().getAbsolutePath(),
-                "--auth-mode=" + PluginExtension.getServerOnlineMode().get().getOnlineMode(),
+                "--assets=" + pluginExtension.getAssets().get().getAbsolutePath(),
+                "--auth-mode=" + pluginExtension.getServerOnlineMode().get().getOnlineMode(),
                 "-bind=" + serverAddress
         ));
     }
