@@ -1,1 +1,1 @@
-rootProject.name = "hytale-boot"
+rootProject.name = "hytale-server-runner"

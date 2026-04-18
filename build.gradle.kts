@@ -5,14 +5,16 @@ plugins {
     `maven-publish`
 }
 
-group = "net.rankedproject.hytale"
+group = "wtf.ranked.hytale.server.runner"
 version = "1.0"
 
 gradlePlugin {
     plugins {
-        register("hytale-boot-plugin") {
-            id = "rankedproject.hytale.boot"
-            implementationClass = "net.rankedproject.hytale.boot.HytaleBootPlugin"
+        register("hytale-server-runner") {
+            id = "wtf.ranked.hytale-server-runner"
+            implementationClass = "wtf.ranked.hytale.server.runner.HytaleServerRunnerPlugin"
+            description = "High-performance Gradle tool for Hytale mod bootstrapping."
+            tags = listOf("hytale", "launcher", "runner", "mod-development", "automation", "imperial")
         }
     }
 }
@@ -26,6 +28,7 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(libs.lombok)
 
+    implementation(libs.vavr)
     implementation(libs.jspecify)
     implementation(libs.zip4j)
     implementation(libs.apache.commons.io)
