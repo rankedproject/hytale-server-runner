@@ -3,14 +3,19 @@ plugins {
     checkstyle
     `kotlin-dsl`
     `maven-publish`
+    id("com.gradle.plugin-publish") version "2.1.1"
 }
 
 group = "wtf.ranked.hytale.server.runner"
-version = "1.0"
+version = "1.0.0"
 
 gradlePlugin {
+    website = "https://github.com/rankedproject/hytale-server-runner"
+    vcsUrl = "https://github.com/rankedproject/hytale-server-runner.git"
+
     plugins {
         register("hytale-server-runner") {
+            displayName = "Hytale Server Runner Plugin"
             id = "wtf.ranked.hytale-server-runner"
             implementationClass = "wtf.ranked.hytale.server.runner.HytaleServerRunnerPlugin"
             description = "High-performance Gradle tool for Hytale mod bootstrapping."
