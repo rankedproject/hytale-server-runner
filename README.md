@@ -1,8 +1,8 @@
-# Hytale Boot Gradle Plugin
+# Hytale Server Runner Gradle Plugin
 
 [](https://plugins.gradle.org/)
 
-**Hytale Boot** is a high-performance orchestration engine for Hytale server administrators and developers. It automates the tedious lifecycle of a server—from fetching native assets and managing remote mods to fine-tuning JVM execution.
+**Hytale Server Runner** is a high-performance orchestration engine for Hytale server administrators and developers. It automates the tedious lifecycle of a server—from fetching native assets and managing remote mods to fine-tuning JVM execution.
 
 -----
 
@@ -29,10 +29,10 @@ plugins {
 
 ## 🛠️ Configuration
 
-Configure your environment using the `hytaleBoot` extension. This block defines how your server behaves and where it sources its data.
+Configure your environment using the `hytaleServerRunner` extension. This block defines how your server behaves and where it sources its data.
 
 ```kotlin
-hytaleBoot {
+hytaleServerRunner {
     // --- Mod Management ---
     mods {
         // Fetch from a direct link
@@ -40,7 +40,7 @@ hytaleBoot {
         
         // Fetch directly from GitHub Releases
         github("owner", "repository", "tag", "assetName.jar")
-        github("rankedproject", "hytale-boot", "1.0", "hytale-boot-plugin.jar")
+        github("rankedproject", "hytale-server-runner", "1.0", "hytale-server-runner.jar")
     }
 
     // --- Server Settings ---
