@@ -1,9 +1,9 @@
 package wtf.ranked.hytale.server.runner.extension;
 
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.BuildServiceParameters;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 
 /**
  * Common parameter definition for Hytale-related Build Services.

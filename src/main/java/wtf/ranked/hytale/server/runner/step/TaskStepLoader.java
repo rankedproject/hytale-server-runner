@@ -2,11 +2,14 @@ package wtf.ranked.hytale.server.runner.step;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
 import org.jspecify.annotations.NonNull;
+
+import java.util.List;
 
 /**
  * Orchestrator that transforms a list of Step classes into a linked Gradle task chain.
@@ -20,6 +23,7 @@ public final class TaskStepLoader {
 
     private final GlobalRunningTask runningTask;
     private final Project project;
+    private final HytalePluginExtension pluginExtension;
 
     /**
      * Configures the task dependencies for a given Global task.
@@ -32,14 +36,35 @@ public final class TaskStepLoader {
      * </ol>
      */
     public void setup() {
-        this.runningTask.steps().stream()
-                .map(this::register)
-                .reduce((previous, current) -> {
-                    current.configure(task -> task.dependsOn(previous));
-                    return current;
-                })
-                .ifPresent(this.runningTask::dependsOn);
+        final List<Class<? extends TaskStep>> steps = runningTask.steps();
+        TaskProvider<?> previousProvider = project.getTasks().named(pluginExtension.getDependsOnBuildTask().get());
+
+        for (final Class<? extends TaskStep> step : steps) {
+            final TaskProvider<?> currentTask = register(step);
+            final TaskProvider<?> dependency = previousProvider;
+
+            currentTask.configure(task -> task.dependsOn(dependency));
+            previousProvider = currentTask;
+        }
+
+        runningTask.dependsOn(previousProvider);
     }
+
+    /**
+     *
+     * final List<Class<? extends TaskStep>> steps = runningTask.steps();
+     * TaskProvider<?> previousProvider = project.getTasks().named(pluginExtension.getDependsOnBuildTask().get());
+     * <p>
+     * for (final Class<? extends TaskStep> step : steps) {
+     * final TaskProvider<?> currentTask = register(step);
+     * final TaskProvider<?> dependency = previousProvider;
+     * <p>
+     * currentTask.configure(task -> task.dependsOn(dependency));
+     * previousProvider = currentTask;
+     * }
+     * <p>
+     * runningTask.dependsOn(previousProvider);
+     */
 
     private @NonNull TaskProvider<?> register(final @NonNull Class<? extends TaskStep> step) {
         final TaskContainer container = project.getTasks();

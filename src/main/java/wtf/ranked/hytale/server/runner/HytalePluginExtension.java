@@ -1,6 +1,5 @@
 package wtf.ranked.hytale.server.runner;
 
-import wtf.ranked.hytale.server.runner.mod.ModExtension;
 import org.gradle.api.Action;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.ProjectLayout;
@@ -10,6 +9,9 @@ import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Nested;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.extension.OnlineMode;
+import wtf.ranked.hytale.server.runner.extension.TaskName;
+import wtf.ranked.hytale.server.runner.mod.ModExtension;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -46,6 +48,14 @@ public abstract class HytalePluginExtension implements Serializable {
      */
     public void environment(final @NonNull String identifier, final @NonNull Object value) {
         this.getEnvironment().put(identifier, value);
+    }
+
+    public void dependsOnBuildTask(final @NonNull String taskName) {
+        this.getDependsOnBuildTask().set(taskName);
+    }
+
+    public void dependsOnBuildTask(final @NonNull TaskName taskName) {
+        this.getDependsOnBuildTask().set(taskName.getIdentifier());
     }
 
     /**
@@ -156,6 +166,8 @@ public abstract class HytalePluginExtension implements Serializable {
      */
     public abstract @NonNull Property<Duration> getDownloadTimeout();
 
+    public abstract @NonNull Property<String> getDependsOnBuildTask();
+
     /**
      * Constructs a new HytalePluginExtension and sets default conventions.
      *
@@ -175,5 +187,6 @@ public abstract class HytalePluginExtension implements Serializable {
         getJvmArgs().convention(new ArrayList<>());
         getEnvironment().convention(new HashMap<>());
         getDownloadTimeout().set(Duration.ofSeconds(20));
+        getDependsOnBuildTask().set(TaskName.JAR.getIdentifier());
     }
 }

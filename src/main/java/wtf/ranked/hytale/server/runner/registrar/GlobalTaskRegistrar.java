@@ -1,11 +1,12 @@
 package wtf.ranked.hytale.server.runner.registrar;
 
 import lombok.RequiredArgsConstructor;
-import wtf.ranked.hytale.server.runner.step.TaskStepLoader;
-import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskProvider;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import wtf.ranked.hytale.server.runner.step.TaskStepLoader;
+import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
 
 /**
  * Handles the registration and lifecycle setup of Global tasks.
@@ -18,6 +19,7 @@ import org.jspecify.annotations.NonNull;
 public final class GlobalTaskRegistrar implements Registrar<GlobalRunningTask> {
 
     private final Project project;
+    private final HytalePluginExtension pluginExtension;
 
     @Override
     public void register(
@@ -29,7 +31,7 @@ public final class GlobalTaskRegistrar implements Registrar<GlobalRunningTask> {
     }
 
     private void configureTask(final @NonNull TaskProvider<? extends GlobalRunningTask> taskProvider) {
-        final TaskStepLoader stepLoader = new TaskStepLoader(taskProvider.get(), this.project);
+        final TaskStepLoader stepLoader = new TaskStepLoader(taskProvider.get(), project, pluginExtension);
         stepLoader.setup();
     }
 }

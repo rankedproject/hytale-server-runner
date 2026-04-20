@@ -1,5 +1,7 @@
 package wtf.ranked.hytale.server.runner.task.type;
 
+import org.gradle.api.tasks.Internal;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.HytaleServerRunnerPlugin;
 import wtf.ranked.hytale.server.runner.step.TaskStep;
 import org.gradle.api.DefaultTask;
@@ -20,7 +22,7 @@ public abstract class GlobalRunningTask extends DefaultTask {
      * Initializes the task and assigns it to the plugin's task group.
      */
     protected GlobalRunningTask() {
-        setGroup(HytaleServerRunnerPlugin.PLUGIN_GROUP);
+        setGroup(HytaleServerRunnerPlugin.GROUP);
     }
 
     /**
@@ -29,4 +31,9 @@ public abstract class GlobalRunningTask extends DefaultTask {
      * @return a list of step classes to be executed in order
      */
     public abstract @NonNull List<Class<? extends TaskStep>> steps();
+
+    @Internal
+    protected @NonNull HytalePluginExtension getHytalePluginExtension() {
+        return getProject().getExtensions().getByType(HytalePluginExtension.class);
+    }
 }

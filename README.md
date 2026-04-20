@@ -60,6 +60,10 @@ hytaleServerRunner {
     serverDirectory.set(layout.projectDirectory.dir("server"))
     modDirectory.set(layout.projectDirectory.dir("mods"))
     downloadTimeout.set(Duration.ofSeconds(50))
+    downloadTimeout.set(Duration.ofSeconds(50))
+    
+    dependsOnBuildTask(TaskName.SHADOW_JAR) // or TaskName.JAR
+    dependsOnBuildTask("MY_SERVER_BUILDING_TASK_NAME")
 
     // Custom environment variables
     environment("databaseName", "mongodb-project")

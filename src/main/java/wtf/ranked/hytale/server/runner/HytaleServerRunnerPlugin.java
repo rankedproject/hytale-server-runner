@@ -1,13 +1,15 @@
 package wtf.ranked.hytale.server.runner;
 
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
+import org.gradle.api.file.ProjectLayout;
+import org.gradle.api.plugins.ExtensionContainer;
+import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.registrar.GlobalTaskRegistrar;
 import wtf.ranked.hytale.server.runner.registrar.GradleServiceRegistrar;
 import wtf.ranked.hytale.server.runner.resource.HttpResourceProvider;
 import wtf.ranked.hytale.server.runner.task.global.LaunchServerTask;
 import wtf.ranked.hytale.server.runner.task.global.UpdateServerTask;
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
-import org.jspecify.annotations.NonNull;
 
 /**
  * Gradle plugin for booting a Hytale server.
@@ -17,13 +19,16 @@ import org.jspecify.annotations.NonNull;
  */
 public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
 
-    public static final String PLUGIN_GROUP = "hytaleServerRunner";
+    public static final String GROUP = "hytaleServer";
 
     @Override
     public final void apply(final @NonNull Project project) {
-        project.getExtensions().create(PLUGIN_GROUP, HytalePluginExtension.class, project.getLayout());
+        final ExtensionContainer extensions = project.getExtensions();
+        final ProjectLayout layout = project.getLayout();
+
+        final HytalePluginExtension pluginExtension = extensions.create(GROUP, HytalePluginExtension.class, layout);
         serviceSetup(project);
-        taskSetup(project);
+        taskSetup(project, pluginExtension);
     }
 
     /**
@@ -44,8 +49,8 @@ public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
      *
      * @param project current project instance
      */
-    private void taskSetup(final @NonNull Project project) {
-        final GlobalTaskRegistrar taskRegistrar = new GlobalTaskRegistrar(project);
+    private void taskSetup(final @NonNull Project project, final @NonNull HytalePluginExtension pluginExtension) {
+        final GlobalTaskRegistrar taskRegistrar = new GlobalTaskRegistrar(project, pluginExtension);
         taskRegistrar.register("launchServer", LaunchServerTask.class);
         taskRegistrar.register("updateServer", UpdateServerTask.class);
     }

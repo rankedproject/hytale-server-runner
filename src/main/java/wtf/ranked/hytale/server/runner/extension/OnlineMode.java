@@ -1,4 +1,4 @@
-package wtf.ranked.hytale.server.runner;
+package wtf.ranked.hytale.server.runner.extension;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
