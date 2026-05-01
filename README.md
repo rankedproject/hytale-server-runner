@@ -29,10 +29,10 @@ plugins {
 
 ## 🛠️ Configuration
 
-Configure your environment using the `hytaleServerRunner` extension. This block defines how your server behaves and where it sources its data.
+Configure your environment using the `hytaleServer` extension. This block defines how your server behaves and where it sources its data.
 
 ```kotlin
-hytaleServerRunner {
+hytaleServer {
     // --- Mod Management ---
     mods {
         // Fetch from a direct link
