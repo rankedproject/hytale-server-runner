@@ -1,8 +1,8 @@
 package wtf.ranked.hytale.server.runner.mod.type;
 
 import lombok.Getter;
-import wtf.ranked.hytale.server.runner.mod.Mod;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.mod.Mod;
 
 import java.net.URI;
 

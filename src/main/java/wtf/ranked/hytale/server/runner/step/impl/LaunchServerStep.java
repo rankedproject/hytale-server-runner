@@ -10,7 +10,6 @@ import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSet;
-import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.step.type.TaskStepExec;
 
@@ -25,15 +24,9 @@ import java.util.List;
  */
 public abstract class LaunchServerStep extends TaskStepExec {
 
-    @Override
-    public final @NonNull Options options() {
-        return Options.builder()
-                .startStep(this::startStep)
-                .build();
-    }
-
     @SneakyThrows
-    private void startStep() {
+    @Override
+    public void runStep() {
         final HytalePluginExtension pluginExtension = getHytalePluginExtension();
         final JavaPluginExtension javaExtension = getProject().getExtensions().getByType(JavaPluginExtension.class);
         final SourceSet sourceSet = javaExtension.getSourceSets().getByName(SourceSet.MAIN_SOURCE_SET_NAME);

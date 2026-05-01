@@ -5,9 +5,9 @@ import org.jspecify.annotations.NonNull;
 /**
  * Generic interface for registering plugin components.
  *
- * @param <C> the base type of the component being registered
+ * @param <ValueClass> the base type of the component being registered
  */
-public interface Registrar<C> {
+public interface Registrar<ValueClass> {
 
     /**
      * Registers a component with a unique identifier.
@@ -15,5 +15,5 @@ public interface Registrar<C> {
      * @param identifier unique name or ID for the component
      * @param valueClass the class implementation to register
      */
-    void register(@NonNull String identifier, @NonNull Class<? extends C> valueClass);
+    void register(@NonNull String identifier, @NonNull Class<? extends ValueClass> valueClass);
 }

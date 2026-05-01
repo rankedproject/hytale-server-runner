@@ -1,13 +1,14 @@
 package wtf.ranked.hytale.server.runner.step;
 
+import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
-import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
 
 import java.util.List;
 
@@ -36,35 +37,23 @@ public final class TaskStepLoader {
      * </ol>
      */
     public void setup() {
-        final List<Class<? extends TaskStep>> steps = runningTask.steps();
-        TaskProvider<?> previousProvider = project.getTasks().named(pluginExtension.getDependsOnBuildTask().get());
+        final TaskProvider<?> dependsOnBuildTask = project.getTasks().named(pluginExtension.getDependsOnBuildTask().get());
+        final List<? extends TaskProvider<?>> steps = runningTask.steps().stream()
+                .map(this::register)
+                .toList();
 
-        for (final Class<? extends TaskStep> step : steps) {
-            final TaskProvider<?> currentTask = register(step);
-            final TaskProvider<?> dependency = previousProvider;
+        final List<TaskProvider<?>> mergeSteps = ImmutableList.<TaskProvider<?>>builder()
+                .add(dependsOnBuildTask)
+                .addAll(steps)
+                .build();
 
-            currentTask.configure(task -> task.dependsOn(dependency));
-            previousProvider = currentTask;
-        }
-
-        runningTask.dependsOn(previousProvider);
+        mergeSteps.stream()
+                .reduce((previous, current) -> {
+                    current.configure(task -> task.dependsOn(previous));
+                    return current;
+                })
+                .ifPresent(runningTask::dependsOn);
     }
-
-    /**
-     *
-     * final List<Class<? extends TaskStep>> steps = runningTask.steps();
-     * TaskProvider<?> previousProvider = project.getTasks().named(pluginExtension.getDependsOnBuildTask().get());
-     * <p>
-     * for (final Class<? extends TaskStep> step : steps) {
-     * final TaskProvider<?> currentTask = register(step);
-     * final TaskProvider<?> dependency = previousProvider;
-     * <p>
-     * currentTask.configure(task -> task.dependsOn(dependency));
-     * previousProvider = currentTask;
-     * }
-     * <p>
-     * runningTask.dependsOn(previousProvider);
-     */
 
     private @NonNull TaskProvider<?> register(final @NonNull Class<? extends TaskStep> step) {
         final TaskContainer container = project.getTasks();

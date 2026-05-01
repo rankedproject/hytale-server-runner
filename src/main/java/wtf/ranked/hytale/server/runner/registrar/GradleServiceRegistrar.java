@@ -1,13 +1,13 @@
 package wtf.ranked.hytale.server.runner.registrar;
 
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
-import wtf.ranked.hytale.server.runner.extension.HytaleExtensionParameters;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.services.BuildService;
 import org.gradle.api.services.BuildServiceRegistry;
 import org.gradle.api.services.BuildServiceSpec;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import wtf.ranked.hytale.server.runner.extension.HytaleExtensionParameters;
 
 /**
  * Registrar responsible for configuring and providing Gradle Shared Build Services.
@@ -46,8 +46,8 @@ public final class GradleServiceRegistrar implements Registrar<BuildService<Hyta
 
     private @NonNull Action<? super BuildServiceSpec<HytaleExtensionParameters>> buildServiceSpec() {
         return serviceSpec -> {
-            final HytalePluginExtension PluginExtension = project.getExtensions().findByType(HytalePluginExtension.class);
-            serviceSpec.getParameters().getHytalePluginExtension().set(PluginExtension);
+            final HytalePluginExtension pluginExtension = project.getExtensions().findByType(HytalePluginExtension.class);
+            serviceSpec.getParameters().getHytalePluginExtension().set(pluginExtension);
         };
     }
 }

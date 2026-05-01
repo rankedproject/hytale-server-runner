@@ -50,10 +50,23 @@ public abstract class HytalePluginExtension implements Serializable {
         this.getEnvironment().put(identifier, value);
     }
 
+    /**
+     * Sets the name of the prerequisite build task using a string identifier.
+     *
+     * @param taskName the name of the task to depend on (e.g., "assemble")
+     */
     public void dependsOnBuildTask(final @NonNull String taskName) {
         this.getDependsOnBuildTask().set(taskName);
     }
 
+    /**
+     * Sets the name of the prerequisite build task using a predefined {@link TaskName} enum.
+     * <p>
+     * This is the preferred method for standard Gradle tasks to ensure type safety
+     * and avoid typos in task identifiers.
+     *
+     * @param taskName the constant representing the target task
+     */
     public void dependsOnBuildTask(final @NonNull TaskName taskName) {
         this.getDependsOnBuildTask().set(taskName.getIdentifier());
     }
@@ -166,6 +179,16 @@ public abstract class HytalePluginExtension implements Serializable {
      */
     public abstract @NonNull Property<Duration> getDownloadTimeout();
 
+    /**
+     * The name of the task that must be completed before the server runs.
+     * <p>
+     * This property defines a dependency for the server execution pipeline.
+     * Usually, this points to a task like {@code jar} or {@code build} to
+     * ensure that the latest version of the project is compiled and packaged
+     * before the server starts.
+     *
+     * @return the property containing the name of the prerequisite build task
+     */
     public abstract @NonNull Property<String> getDependsOnBuildTask();
 
     /**

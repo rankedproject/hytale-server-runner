@@ -1,11 +1,11 @@
 package wtf.ranked.hytale.server.runner.task.type;
 
+import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Internal;
+import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.HytaleServerRunnerPlugin;
 import wtf.ranked.hytale.server.runner.step.TaskStep;
-import org.gradle.api.DefaultTask;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 

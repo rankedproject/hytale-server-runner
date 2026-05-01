@@ -1,11 +1,11 @@
 package wtf.ranked.hytale.server.runner.step.impl;
 
-import wtf.ranked.hytale.server.runner.mod.Mod;
-import wtf.ranked.hytale.server.runner.mod.ModDownloader;
-import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.workers.WorkerExecutor;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.mod.Mod;
+import wtf.ranked.hytale.server.runner.mod.ModDownloader;
+import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
 
 import javax.inject.Inject;
 
@@ -17,16 +17,10 @@ import javax.inject.Inject;
 public abstract class DownloadModStep extends TaskStepDefault {
 
     @Override
-    public final @NonNull Options options() {
-        return Options.builder()
-                .startStep(this::startStep)
-                .build();
-    }
-
-    private void startStep() {
+    public void runStep() {
         final ModDownloader modContext = new ModDownloader(getHytalePluginExtension(), getWorkerExecutor());
         final ListProperty<Mod> mods = getHytalePluginExtension().getModExtension().getMods();
-        modContext.download(mods.get());
+        modContext.downloadAllMods(mods.get());
     }
 
     @Inject

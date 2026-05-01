@@ -34,12 +34,6 @@ public final class FileUtil {
         }
     }
 
-    /**
-     * Deletes a specific file within a directory if it exists.
-     *
-     * @param directory parent directory
-     * @param fileName  name of the file to remove
-     */
     @SneakyThrows
     public void deleteFile(final @NonNull File directory, final @NonNull String fileName) {
         final File file = new File(directory, fileName);

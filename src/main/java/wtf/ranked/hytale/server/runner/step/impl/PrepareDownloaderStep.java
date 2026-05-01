@@ -1,13 +1,13 @@
 package wtf.ranked.hytale.server.runner.step.impl;
 
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
-import wtf.ranked.hytale.server.runner.resource.HttpResourceProvider;
-import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
-import wtf.ranked.hytale.server.runner.util.FileUtil;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.ServiceReference;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import wtf.ranked.hytale.server.runner.resource.HttpResourceProvider;
+import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
+import wtf.ranked.hytale.server.runner.util.FileUtil;
 
 import java.io.File;
 import java.net.URI;
@@ -21,13 +21,7 @@ import java.net.URI;
 public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
     @Override
-    public final @NonNull Options options() {
-        return Options.builder()
-                .startStep(this::startStep)
-                .build();
-    }
-
-    private void startStep() {
+    public void runStep() {
         final Project project = getProject();
         final HytalePluginExtension pluginExtension = getHytalePluginExtension();
 
@@ -40,16 +34,16 @@ public abstract class PrepareDownloaderStep extends TaskStepDefault {
         FileUtil.deleteDirectory(runDirectory);
         project.mkdir(runDirectory);
 
-        final File destinationFile = new File(runDirectory, "hytale-downloader.zip");
-        final URI serverDownloadUri = pluginExtension.getServerDownloadUri().get();
+        final File destinationZipFile = new File(runDirectory, "hytale-downloader.zip");
+        final URI serverFilesDownloadUri = pluginExtension.getServerDownloadUri().get();
 
         getResourceProvider().get().builder()
-                .uri(serverDownloadUri)
+                .uri(serverFilesDownloadUri)
                 .timeout(pluginExtension.getDownloadTimeout().get())
-                .destinationFile(destinationFile)
+                .destinationFile(destinationZipFile)
                 .provide();
 
-        FileUtil.unpackZipFile(destinationFile, runDirectory);
+        FileUtil.unpackZipFile(destinationZipFile, runDirectory);
     }
 
     @ServiceReference("httpResourceProvider")

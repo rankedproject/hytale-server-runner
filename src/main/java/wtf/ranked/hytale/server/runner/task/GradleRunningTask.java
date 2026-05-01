@@ -1,9 +1,8 @@
 package wtf.ranked.hytale.server.runner.task;
 
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import org.gradle.api.Task;
-import org.gradle.api.tasks.Internal;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 
 /**
  * Root interface for all Hytale boot-related tasks.
@@ -29,6 +28,5 @@ public interface GradleRunningTask extends Task {
      *
      * @return the active configuration extension
      */
-    @Internal
     @NonNull HytalePluginExtension getHytalePluginExtension();
 }

@@ -1,12 +1,12 @@
 package wtf.ranked.hytale.server.runner.task.global;
 
+import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.step.TaskStep;
 import wtf.ranked.hytale.server.runner.step.impl.DownloadModStep;
 import wtf.ranked.hytale.server.runner.step.impl.DownloadServerAssetStep;
 import wtf.ranked.hytale.server.runner.step.impl.PrepareDownloaderStep;
 import wtf.ranked.hytale.server.runner.step.impl.PrepareReinstallStep;
 import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 

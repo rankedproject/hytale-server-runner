@@ -1,10 +1,10 @@
 package wtf.ranked.hytale.server.runner.mod;
 
-import wtf.ranked.hytale.server.runner.mod.type.GithubMod;
-import wtf.ranked.hytale.server.runner.mod.type.UrlMod;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.tasks.Input;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.mod.type.GithubMod;
+import wtf.ranked.hytale.server.runner.mod.type.UrlMod;
 
 /**
  * Configuration extension for managing Hytale mods.

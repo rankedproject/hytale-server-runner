@@ -2,10 +2,10 @@ package wtf.ranked.hytale.server.runner.resource;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import wtf.ranked.hytale.server.runner.extension.HytaleExtensionParameters;
-import wtf.ranked.hytale.server.runner.resource.ResourceProvider.ResourceRequest.Builder;
 import org.gradle.api.services.BuildService;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.extension.HytaleExtensionParameters;
+import wtf.ranked.hytale.server.runner.resource.ResourceProvider.ResourceRequest.Builder;
 
 import java.io.File;
 import java.net.URI;

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "wtf.ranked.hytale.server.runner"
-version = "1.0.0"
+version = "1.1.0"
 
 gradlePlugin {
     website = "https://github.com/rankedproject/hytale-server-runner"

@@ -2,14 +2,14 @@ package wtf.ranked.hytale.server.runner.mod;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.gradle.workers.WorkQueue;
+import org.gradle.workers.WorkerExecutor;
+import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.mod.strategy.ModDownloaderStrategy;
 import wtf.ranked.hytale.server.runner.mod.strategy.UrlDownloaderStrategy;
 import wtf.ranked.hytale.server.runner.mod.type.GithubMod;
 import wtf.ranked.hytale.server.runner.mod.type.UrlMod;
-import org.gradle.workers.WorkQueue;
-import org.gradle.workers.WorkerExecutor;
-import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +34,7 @@ public final class ModDownloader {
      *
      * @param mods the collection of mods defined in the build script
      */
-    public void download(final @NonNull List<? extends Mod> mods) {
+    public void downloadAllMods(final @NonNull List<? extends Mod> mods) {
         mods.forEach(this::downloadMod);
     }
 

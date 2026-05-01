@@ -1,10 +1,10 @@
 package wtf.ranked.hytale.server.runner.task;
 
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.TaskAction;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 
 /**
  * Base class for tasks that launch the Hytale server process.

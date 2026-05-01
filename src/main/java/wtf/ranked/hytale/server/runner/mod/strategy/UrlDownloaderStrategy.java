@@ -1,12 +1,12 @@
 package wtf.ranked.hytale.server.runner.mod.strategy;
 
+import org.gradle.api.provider.Property;
+import org.gradle.api.services.ServiceReference;
+import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.mod.type.UrlMod;
 import wtf.ranked.hytale.server.runner.resource.HttpResourceProvider;
 import wtf.ranked.hytale.server.runner.resource.exception.ResourceDownloadException;
-import org.gradle.api.provider.Property;
-import org.gradle.api.services.ServiceReference;
-import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 

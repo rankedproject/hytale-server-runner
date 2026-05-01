@@ -22,10 +22,7 @@ public final class GlobalTaskRegistrar implements Registrar<GlobalRunningTask> {
     private final HytalePluginExtension pluginExtension;
 
     @Override
-    public void register(
-            final @NonNull String name,
-            final @NonNull Class<? extends GlobalRunningTask> runningTask
-    ) {
+    public void register(final @NonNull String name, final @NonNull Class<? extends GlobalRunningTask> runningTask) {
         final TaskProvider<? extends GlobalRunningTask> taskProvider = project.getTasks().register(name, runningTask);
         configureTask(taskProvider);
     }

@@ -1,11 +1,11 @@
 package wtf.ranked.hytale.server.runner.step.impl;
 
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
-import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
-import wtf.ranked.hytale.server.runner.util.FileUtil;
 import org.apache.commons.lang3.SystemUtils;
 import org.gradle.process.ExecOperations;
 import org.jspecify.annotations.NonNull;
+import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
+import wtf.ranked.hytale.server.runner.util.FileUtil;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -24,13 +24,7 @@ public abstract class DownloadServerAssetStep extends TaskStepDefault {
     private static final String LINUX_EXECUTABLE_FILE = "hytale-downloader-linux-amd64";
 
     @Override
-    public final @NonNull Options options() {
-        return Options.builder()
-                .startStep(this::startStep)
-                .build();
-    }
-
-    private void startStep() {
+    public void runStep() {
         final HytalePluginExtension pluginExtension = getHytalePluginExtension();
         if (pluginExtension.getServerJar().get().exists() && pluginExtension.getAssets().get().exists()) {
             setDidWork(false);

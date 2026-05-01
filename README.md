@@ -21,7 +21,7 @@ Add the plugin to your `build.gradle.kts` (Kotlin) or `build.gradle` (Groovy) fi
 
 ```kotlin
 plugins {
-    id("wtf.ranked.hytale-server-runner") version "1.0.0"
+    id("wtf.ranked.hytale-server-runner") version "1.1.0"
 }
 ```
 
@@ -63,6 +63,7 @@ hytaleServerRunner {
     downloadTimeout.set(Duration.ofSeconds(50))
     
     dependsOnBuildTask(TaskName.SHADOW_JAR) // or TaskName.JAR
+    // or
     dependsOnBuildTask("MY_SERVER_BUILDING_TASK_NAME")
 
     // Custom environment variables
