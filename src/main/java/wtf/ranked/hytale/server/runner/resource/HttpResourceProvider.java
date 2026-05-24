@@ -44,8 +44,8 @@ public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
                 .build();
 
         Try.run(() -> sendHttpRequest(request, httpRequest))
-                .onFailure(_ -> FileUtil.deleteFile(request.destinationFile()))
-                .onFailure(InterruptedException.class, _ -> Thread.currentThread().interrupt())
+                .onFailure($ -> FileUtil.deleteFile(request.destinationFile()))
+                .onFailure(InterruptedException.class, $ -> Thread.currentThread().interrupt())
                 .getOrElseThrow(ResourceDownloadException::new);
     }
 

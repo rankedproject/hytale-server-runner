@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "wtf.ranked.hytale.server.runner"
-version = "1.2.0"
+version = "1.3.0"
 
 gradlePlugin {
     website = "https://github.com/rankedproject/hytale-server-runner"
@@ -62,5 +62,11 @@ tasks.withType<Checkstyle> {
     source = fileTree("src") {
         include("**/*.java")
         exclude("**/generated/**")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }

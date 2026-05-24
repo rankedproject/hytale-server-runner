@@ -35,7 +35,7 @@ public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
         final HytalePluginExtension pluginExtension = extensions.create(GROUP, HytalePluginExtension.class, layout);
 
         serviceSetup(project);
-        project.afterEvaluate(_ -> {
+        project.afterEvaluate($ -> {
             stepTaskSetup(project);
             globalTaskSetup(project, pluginExtension);
         });
