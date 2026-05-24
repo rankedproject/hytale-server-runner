@@ -2,11 +2,11 @@ package wtf.ranked.hytale.server.runner.step;
 
 import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskProvider;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.task.type.GlobalRunningTask;
 
@@ -19,66 +19,44 @@ import java.util.List;
  * algorithm to ensure that each step depends on the one preceding it,
  * effectively creating a sequential execution queue.
  */
+@NullMarked
 @RequiredArgsConstructor
 public final class TaskStepLoader {
 
-    private final GlobalRunningTask runningTask;
     private final Project project;
     private final HytalePluginExtension pluginExtension;
 
     /**
-     * Configures the task dependencies for a given Global task.
+     * Configures the task dependencies for a given Global task to create a sequential execution pipeline.
      * <p>
-     * This method performs the following:
+     * This method:
      * <ol>
-     * <li>Registers each step as a unique task name (GlobalTask + StepName).</li>
-     * <li>Links tasks: Step B dependsOn Step A.</li>
-     * <li>Makes the Global task depend on the final step in the chain.</li>
+     * <li>Resolves all build dependencies and internal steps into a single ordered list.</li>
+     * <li>Links the task chain so that each step depends on the preceding one (Step A -> Step B).</li>
+     * <li>Ensures the {@code GlobalRunningTask} executes only after the entire chain completes.</li>
      * </ol>
      */
-    public void setup() {
-        final TaskProvider<?> dependsOnBuildTask = project.getTasks().named(pluginExtension.getDependsOnBuildTask().get());
+    public void setup(final GlobalRunningTask runningTask) {
+        final TaskContainer container = project.getTasks();
+        final List<TaskProvider<Task>> dependsOn = pluginExtension.getDependsOn().get().stream()
+                .map(container::named)
+                .toList();
+
         final List<? extends TaskProvider<?>> steps = runningTask.steps().stream()
-                .map(this::register)
+                .map(TaskStepRegistry::getName)
+                .map(container::named)
                 .toList();
 
         final List<TaskProvider<?>> mergeSteps = ImmutableList.<TaskProvider<?>>builder()
-                .add(dependsOnBuildTask)
+                .addAll(dependsOn)
                 .addAll(steps)
                 .build();
 
         mergeSteps.stream()
                 .reduce((previous, current) -> {
-                    current.configure(task -> task.dependsOn(previous));
+                    runningTask.dependsOn(previous);
                     return current;
                 })
                 .ifPresent(runningTask::dependsOn);
-    }
-
-    private @NonNull TaskProvider<?> register(final @NonNull Class<? extends TaskStep> step) {
-        final TaskContainer container = project.getTasks();
-        return container.register(TaskLoaderUtil.newTaskIdentifier(this.runningTask, step), step);
-    }
-
-    @UtilityClass
-    private static final class TaskLoaderUtil {
-
-        private final String STEP_TASK_IDENTIFIER_TEMPLATE = "%s_%s";
-
-        /**
-         * Generates a unique task name using the {@link #STEP_TASK_IDENTIFIER_TEMPLATE}.
-         * <p>
-         * This name is used to register the step as a sub-task of the provided global task.
-         *
-         * @param runningTask the main task providing the root name
-         * @param step        the step class providing the sub-task name (simple class name)
-         * @return the formatted task name, e.g., "globalTaskName_StepSimpleName"
-         */
-        private @NonNull String newTaskIdentifier(
-                final @NonNull GlobalRunningTask runningTask,
-                final @NonNull Class<? extends TaskStep> step
-        ) {
-            return STEP_TASK_IDENTIFIER_TEMPLATE.formatted(runningTask.getName(), step.getSimpleName());
-        }
     }
 }

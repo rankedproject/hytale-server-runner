@@ -22,7 +22,7 @@ Add the plugin to your `build.gradle.kts` (Kotlin) or `build.gradle` (Groovy):
 
 ```kotlin
 plugins {
-    id("wtf.ranked.hytale-server-runner") version "1.1.0"
+    id("wtf.ranked.hytale-server-runner") version "1.2.0"
 }
 ```
 
@@ -48,7 +48,6 @@ hytaleServer {
     
     // --- JVM and Performance ---
     jvmArgs.addAll("-Xmx4G", "-Xms2G", "-XX:+UseG1GC")
-    enableHotSwap = true // Requires JBR/DCEVM
 
     // --- Advanced Workspace Setup ---
     runDirectory.set(layout.projectDirectory.dir("run"))
@@ -56,7 +55,7 @@ hytaleServer {
     modDirectory.set(layout.projectDirectory.dir("mods"))
     
     // Linking multi-module builds
-    dependsOnBuildTask(TaskName.SHADOW_JAR) 
+    dependsOn(TaskName.JAR) 
     
     environment("databaseName", "mongodb-project")
 }
@@ -71,7 +70,6 @@ The plugin registers the following tasks under the `hytaleServer` group:
 | Task | Description |
 | :--- | :--- |
 | `launchServer` | **The Daily Driver.** Checks for updates, verifies mods, and launches the server. Supports -Ddebug for hot-swapping. |
-| `updateServer` | **The Fresh Start.** Wipes all existing server files and performs a clean installation. |
 
 ### How to run:
 ```bash

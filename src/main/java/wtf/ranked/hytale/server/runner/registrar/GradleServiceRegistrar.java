@@ -5,7 +5,7 @@ import org.gradle.api.Project;
 import org.gradle.api.services.BuildService;
 import org.gradle.api.services.BuildServiceRegistry;
 import org.gradle.api.services.BuildServiceSpec;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.extension.HytaleExtensionParameters;
 
@@ -17,12 +17,13 @@ import wtf.ranked.hytale.server.runner.extension.HytaleExtensionParameters;
  * automatically injected with the current {@link HytalePluginExtension}
  * configuration.
  */
+@NullMarked
 public final class GradleServiceRegistrar implements Registrar<BuildService<HytaleExtensionParameters>> {
 
     private final Project project;
     private final BuildServiceRegistry serviceRegistry;
 
-    public GradleServiceRegistrar(final @NonNull Project project) {
+    public GradleServiceRegistrar(final Project project) {
         this.project = project;
         this.serviceRegistry = project.getGradle().getSharedServices();
     }
@@ -34,17 +35,17 @@ public final class GradleServiceRegistrar implements Registrar<BuildService<Hyta
      * wires the project's Hytale boot extension into the service's parameters.
      *
      * @param identifier   the unique name for the shared service
-     * @param buildService the class implementation of the build service
+     * @param value the class implementation of the build service
      */
     @Override
     public void register(
-            final @NonNull String identifier,
-            final @NonNull Class<? extends BuildService<HytaleExtensionParameters>> buildService
+            final String identifier,
+            final Class<? extends BuildService<HytaleExtensionParameters>> value
     ) {
-        this.serviceRegistry.registerIfAbsent(identifier, buildService, buildServiceSpec());
+        this.serviceRegistry.registerIfAbsent(identifier, value, buildServiceSpec());
     }
 
-    private @NonNull Action<? super BuildServiceSpec<HytaleExtensionParameters>> buildServiceSpec() {
+    private Action<? super BuildServiceSpec<HytaleExtensionParameters>> buildServiceSpec() {
         return serviceSpec -> {
             final HytalePluginExtension pluginExtension = project.getExtensions().findByType(HytalePluginExtension.class);
             serviceSpec.getParameters().getHytalePluginExtension().set(pluginExtension);

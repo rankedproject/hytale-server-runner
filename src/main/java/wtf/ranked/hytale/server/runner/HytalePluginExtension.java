@@ -10,7 +10,6 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Nested;
 import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.extension.OnlineMode;
-import wtf.ranked.hytale.server.runner.extension.TaskName;
 import wtf.ranked.hytale.server.runner.mod.ModExtension;
 
 import javax.inject.Inject;
@@ -51,24 +50,12 @@ public abstract class HytalePluginExtension implements Serializable {
     }
 
     /**
-     * Sets the name of the prerequisite build task using a string identifier.
+     * Adds the name of the prerequisite build task using a string identifier.
      *
      * @param taskName the name of the task to depend on (e.g., "assemble")
      */
-    public void dependsOnBuildTask(final @NonNull String taskName) {
-        this.getDependsOnBuildTask().set(taskName);
-    }
-
-    /**
-     * Sets the name of the prerequisite build task using a predefined {@link TaskName} enum.
-     * <p>
-     * This is the preferred method for standard Gradle tasks to ensure type safety
-     * and avoid typos in task identifiers.
-     *
-     * @param taskName the constant representing the target task
-     */
-    public void dependsOnBuildTask(final @NonNull TaskName taskName) {
-        this.getDependsOnBuildTask().set(taskName.getIdentifier());
+    public void dependsOn(final @NonNull String... taskName) {
+        this.getDependsOn().addAll(taskName);
     }
 
     /**
@@ -180,16 +167,16 @@ public abstract class HytalePluginExtension implements Serializable {
     public abstract @NonNull Property<Duration> getDownloadTimeout();
 
     /**
-     * The name of the task that must be completed before the server runs.
+     * The names of the tasks that must be completed before the server runs.
      * <p>
-     * This property defines a dependency for the server execution pipeline.
-     * Usually, this points to a task like {@code jar} or {@code build} to
+     * These properties define dependencies for the server execution pipeline.
+     * Usually, this includes tasks like {@code jar} or {@code shadowJar} to
      * ensure that the latest version of the project is compiled and packaged
      * before the server starts.
      *
-     * @return the property containing the name of the prerequisite build task
+     * @return the property containing the list of prerequisite build tasks
      */
-    public abstract @NonNull Property<String> getDependsOnBuildTask();
+    public abstract @NonNull ListProperty<String> getDependsOn();
 
     /**
      * Constructs a new HytalePluginExtension and sets default conventions.
@@ -210,6 +197,6 @@ public abstract class HytalePluginExtension implements Serializable {
         getJvmArgs().convention(new ArrayList<>());
         getEnvironment().convention(new HashMap<>());
         getDownloadTimeout().set(Duration.ofSeconds(20));
-        getDependsOnBuildTask().set(TaskName.JAR.getIdentifier());
+        getDependsOn().convention(new ArrayList<>()).add("jar");
     }
 }

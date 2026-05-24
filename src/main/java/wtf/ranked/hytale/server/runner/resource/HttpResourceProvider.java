@@ -14,10 +14,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * HTTP implementation of the ResourceProvider.
+ * HTTP implementation of the {@link ResourceProvider}.
  * <p>
- * Uses the native Java {@link HttpClient} to perform
- * asynchronous file downloads with redirect support and custom timeouts.
+ * Utilizes the native Java {@link HttpClient} to perform file downloads.
+ * Features include:
+ * <ul>
+ * <li>Automatic follow-redirects ({@code HttpClient.Redirect.ALWAYS}).</li>
+ * <li>Direct file streaming via {@link HttpResponse.BodyHandlers#ofFile(Path)}.</li>
+ * <li>Atomic failure handling: deletes the destination file if the download fails or returns a non-success status code.</li>
+ * </ul>
  */
 public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
 
@@ -41,9 +46,7 @@ public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
         Try.run(() -> sendHttpRequest(request, httpRequest))
                 .onFailure(_ -> FileUtil.deleteFile(request.destinationFile()))
                 .onFailure(InterruptedException.class, _ -> Thread.currentThread().interrupt())
-                .getOrElseThrow(exception -> {
-                    throw new ResourceDownloadException(exception);
-                });
+                .getOrElseThrow(ResourceDownloadException::new);
     }
 
     private void sendHttpRequest(
@@ -60,7 +63,9 @@ public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
         final boolean isStatusCodeAllow = statusCode >= 200 && statusCode < 300;
 
         if (!isStatusCodeAllow || Files.size(destinationPath) <= 0) {
-            throw new ResourceDownloadException("Failed to download resource %s".formatted(destinationFile.getName()));
+            throw new ResourceDownloadException(
+                    "Failed to download resource %s. Server returned HTTP %s".formatted(destinationFile.getName(), statusCode)
+            );
         }
     }
 }

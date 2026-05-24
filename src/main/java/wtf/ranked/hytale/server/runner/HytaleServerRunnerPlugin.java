@@ -4,12 +4,16 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.file.ProjectLayout;
 import org.gradle.api.plugins.ExtensionContainer;
-import org.jspecify.annotations.NonNull;
-import wtf.ranked.hytale.server.runner.registrar.GlobalTaskRegistrar;
+import org.jspecify.annotations.NullMarked;
 import wtf.ranked.hytale.server.runner.registrar.GradleServiceRegistrar;
+import wtf.ranked.hytale.server.runner.registrar.task.GlobalTaskRegistrar;
+import wtf.ranked.hytale.server.runner.registrar.task.StepTaskRegistrar;
 import wtf.ranked.hytale.server.runner.resource.HttpResourceProvider;
+import wtf.ranked.hytale.server.runner.step.impl.DownloadModStep;
+import wtf.ranked.hytale.server.runner.step.impl.DownloadServerAssetStep;
+import wtf.ranked.hytale.server.runner.step.impl.LaunchServerStep;
+import wtf.ranked.hytale.server.runner.step.impl.PrepareDownloaderStep;
 import wtf.ranked.hytale.server.runner.task.global.LaunchServerTask;
-import wtf.ranked.hytale.server.runner.task.global.UpdateServerTask;
 
 /**
  * Gradle plugin for booting a Hytale server.
@@ -17,18 +21,24 @@ import wtf.ranked.hytale.server.runner.task.global.UpdateServerTask;
  * Registers the necessary services and tasks to manage the server
  * lifecycle, primarily through the {@code launchServer} task.
  */
+@NullMarked
 public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
 
-    public static final String GROUP = "hytaleServer";
+    public static final String GROUP = "hytaleRunner";
+    public static final String GLOBAL_TASK_GROUP = "hytale runner";
+    public static final String INTERNAL_TASK_GROUP = "hytale runner lifecycle";
 
     @Override
-    public final void apply(final @NonNull Project project) {
+    public final void apply(final Project project) {
         final ExtensionContainer extensions = project.getExtensions();
         final ProjectLayout layout = project.getLayout();
-
         final HytalePluginExtension pluginExtension = extensions.create(GROUP, HytalePluginExtension.class, layout);
+
         serviceSetup(project);
-        taskSetup(project, pluginExtension);
+        project.afterEvaluate(_ -> {
+            stepTaskSetup(project);
+            globalTaskSetup(project, pluginExtension);
+        });
     }
 
     /**
@@ -36,7 +46,7 @@ public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
      *
      * @param project current project instance
      */
-    private void serviceSetup(final @NonNull Project project) {
+    private void serviceSetup(final Project project) {
         final GradleServiceRegistrar serviceRegistrar = new GradleServiceRegistrar(project);
         serviceRegistrar.register("httpResourceProvider", HttpResourceProvider.class);
     }
@@ -44,14 +54,21 @@ public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
     /**
      * Sets up the global tasks for server interaction.
      * <p>
-     * Registers {@code launchServer} to start the instance and
-     * {@code updateServer} to prepare assets and the server environment.
+     * Registers {@code launchServer} to start the server instance.
      *
      * @param project current project instance
+     * @param pluginExtension the extension used to configure the runner
      */
-    private void taskSetup(final @NonNull Project project, final @NonNull HytalePluginExtension pluginExtension) {
+    private void globalTaskSetup(final Project project, final HytalePluginExtension pluginExtension) {
         final GlobalTaskRegistrar taskRegistrar = new GlobalTaskRegistrar(project, pluginExtension);
         taskRegistrar.register("launchServer", LaunchServerTask.class);
-        taskRegistrar.register("updateServer", UpdateServerTask.class);
+    }
+
+    private void stepTaskSetup(final Project project) {
+        final StepTaskRegistrar taskRegistrar = new StepTaskRegistrar(project);
+        taskRegistrar.register("downloadModStep", DownloadModStep.class);
+        taskRegistrar.register("downloadServerAssetStep", DownloadServerAssetStep.class);
+        taskRegistrar.register("launchServerStep", LaunchServerStep.class);
+        taskRegistrar.register("prepareDownloaderStep", PrepareDownloaderStep.class);
     }
 }

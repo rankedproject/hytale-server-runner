@@ -1,9 +1,10 @@
 package wtf.ranked.hytale.server.runner.step.impl;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.gradle.process.ExecOperations;
 import org.jspecify.annotations.NonNull;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import wtf.ranked.hytale.server.runner.platform.PlatformFile;
+import wtf.ranked.hytale.server.runner.platform.PlatformFileProvider;
 import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
 import wtf.ranked.hytale.server.runner.util.FileUtil;
 
@@ -20,9 +21,6 @@ public abstract class DownloadServerAssetStep extends TaskStepDefault {
 
     private static final String SERVER_ZIP_FILE = "hytale-server.zip";
 
-    private static final String WINDOWS_EXECUTABLE_FILE = "hytale-downloader-windows-amd64.exe";
-    private static final String LINUX_EXECUTABLE_FILE = "hytale-downloader-linux-amd64";
-
     @Override
     public void runStep() {
         final HytalePluginExtension pluginExtension = getHytalePluginExtension();
@@ -32,11 +30,9 @@ public abstract class DownloadServerAssetStep extends TaskStepDefault {
         }
 
         final File runDirectory = pluginExtension.getRunDirectory().get().getAsFile();
-        final String executableFileName = SystemUtils.IS_OS_WINDOWS
-                ? WINDOWS_EXECUTABLE_FILE
-                : LINUX_EXECUTABLE_FILE;
+        final PlatformFile platformFile = PlatformFileProvider.getPlatformFile();
 
-        final File executableFile = new File(runDirectory, executableFileName);
+        final File executableFile = new File(runDirectory, platformFile.getFileName());
         final File destinationZipFile = new File(runDirectory, SERVER_ZIP_FILE);
 
         getExecOperations().exec(execSpec -> {

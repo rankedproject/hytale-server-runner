@@ -22,7 +22,7 @@ public abstract class GlobalRunningTask extends DefaultTask {
      * Initializes the task and assigns it to the plugin's task group.
      */
     protected GlobalRunningTask() {
-        setGroup(HytaleServerRunnerPlugin.GROUP);
+        setGroup(HytaleServerRunnerPlugin.GLOBAL_TASK_GROUP);
     }
 
     /**

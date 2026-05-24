@@ -1,19 +1,20 @@
 package wtf.ranked.hytale.server.runner.registrar;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Generic interface for registering plugin components.
  *
- * @param <ValueClass> the base type of the component being registered
+ * @param <C> the base type of the component being registered
  */
-public interface Registrar<ValueClass> {
+@NullMarked
+public interface Registrar<C> {
 
     /**
      * Registers a component with a unique identifier.
      *
      * @param identifier unique name or ID for the component
-     * @param valueClass the class implementation to register
+     * @param value the class implementation to register
      */
-    void register(@NonNull String identifier, @NonNull Class<? extends ValueClass> valueClass);
+    void register(String identifier, Class<? extends C> value);
 }

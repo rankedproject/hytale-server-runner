@@ -2,6 +2,7 @@ package wtf.ranked.hytale.server.runner.task.type;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import wtf.ranked.hytale.server.runner.HytaleServerRunnerPlugin;
 import wtf.ranked.hytale.server.runner.task.DefaultRunningTask;
 import wtf.ranked.hytale.server.runner.task.JavaExecRunningTask;
 
@@ -21,7 +22,7 @@ public final class InternalRunningTask {
     public abstract static class InternalExecRunningTask extends JavaExecRunningTask {
 
         protected InternalExecRunningTask() {
-            setGroup(null);
+            setGroup(HytaleServerRunnerPlugin.INTERNAL_TASK_GROUP);
             setDescription(null);
         }
     }
@@ -32,7 +33,7 @@ public final class InternalRunningTask {
     public abstract static class InternalDefaultRunningTask extends DefaultRunningTask {
 
         protected InternalDefaultRunningTask() {
-            setGroup(null);
+            setGroup(HytaleServerRunnerPlugin.INTERNAL_TASK_GROUP);
             setDescription(null);
         }
     }

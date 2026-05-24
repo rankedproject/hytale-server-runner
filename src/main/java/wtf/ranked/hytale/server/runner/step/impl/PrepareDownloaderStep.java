@@ -1,6 +1,5 @@
 package wtf.ranked.hytale.server.runner.step.impl;
 
-import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.ServiceReference;
 import org.jspecify.annotations.NonNull;
@@ -22,9 +21,7 @@ public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
     @Override
     public void runStep() {
-        final Project project = getProject();
         final HytalePluginExtension pluginExtension = getHytalePluginExtension();
-
         if (pluginExtension.getServerJar().get().exists() && pluginExtension.getAssets().get().exists()) {
             setDidWork(false);
             return;
@@ -32,7 +29,7 @@ public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
         final File runDirectory = pluginExtension.getRunDirectory().get().getAsFile();
         FileUtil.deleteDirectory(runDirectory);
-        project.mkdir(runDirectory);
+        getProject().mkdir(runDirectory);
 
         final File destinationZipFile = new File(runDirectory, "hytale-downloader.zip");
         final URI serverFilesDownloadUri = pluginExtension.getServerDownloadUri().get();
