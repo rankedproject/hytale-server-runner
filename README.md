@@ -55,7 +55,7 @@ hytaleServer {
     modDirectory.set(layout.projectDirectory.dir("mods"))
     
     // Linking multi-module builds
-    dependsOn(TaskName.JAR) 
+    dependsOn("help", "testClasses") 
     
     environment("databaseName", "mongodb-project")
 }
