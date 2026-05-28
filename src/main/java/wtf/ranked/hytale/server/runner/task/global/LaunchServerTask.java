@@ -13,16 +13,20 @@ import java.util.List;
 /**
  * The primary execution task for booting a Hytale server.
  * <p>
- * This task orchestrates a multi-step pipeline that prepares the
- * environment, verifies and downloads missing dependencies (assets and mods),
- * and finally executes the server process.
+ * This task acts as a global orchestrator for the server lifecycle. It defines
+ * and executes a multistep pipeline that ensures the environment is ready,
+ * dependencies such as assets and mods are resolved, and the server process
+ * is correctly launched.
  */
 public abstract class LaunchServerTask extends GlobalRunningTask {
 
     /**
-     * Defines the sequential boot pipeline.
+     * Defines the sequential boot pipeline for the server.
+     * <p>
+     * The returned list specifies the exact order of execution for the lifecycle steps,
+     * starting from environment preparation to final server execution.
      *
-     * @return an ordered list of steps required to reach a running server state.
+     * @return an ordered list of {@link TaskStep} classes representing the boot sequence.
      */
     @Override
     public @NonNull List<Class<? extends TaskStep>> steps() {

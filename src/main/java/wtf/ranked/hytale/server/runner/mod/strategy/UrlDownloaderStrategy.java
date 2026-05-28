@@ -26,14 +26,15 @@ public abstract class UrlDownloaderStrategy extends ModDownloaderStrategy<UrlMod
      */
     @Override
     protected final void download(final @NonNull UrlMod mod) throws ResourceDownloadException {
-        final HytalePluginExtension hytalePluginExtension = getParameters().getHytalePluginExtension().get();
-        final File modsDirectory = hytalePluginExtension.getModDirectory().get().getAsFile();
+        final HytalePluginExtension pluginExtension = getParameters().getHytalePluginExtension().get();
 
+        final File modsDirectory = pluginExtension.getModDirectory().get().getAsFile();
         final File destinationFile = new File(modsDirectory, mod.getFileName());
+
         getResourceProvider().get().builder()
                 .destinationFile(destinationFile)
                 .uri(mod.getUri())
-                .timeout(hytalePluginExtension.getDownloadTimeout().get())
+                .timeout(pluginExtension.getDownloadTimeout().get())
                 .provide();
     }
 

@@ -9,14 +9,16 @@ import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 /**
  * Base class for tasks running entirely within the Gradle process.
  * <p>
- * Serves as the foundation for <b>Internal</b> worker tasks or
- * <b>Global</b> tasks that handle file management, updates, or
- * environment setup without booting a server.
+ * This class serves as the foundation for both <b>Internal</b> worker tasks
+ * and <b>Global</b> orchestrators that perform operations like file management,
+ * asset updates, or environment configuration without spawning external processes.
  */
 public abstract class DefaultRunningTask extends DefaultTask implements GradleRunningTask {
 
     /**
-     * Entry point for Gradle execution.
+     * Entry point for Gradle task execution.
+     * <p>
+     * Triggers the implementation-specific business logic defined in {@link #run()}.
      */
     @TaskAction
     public final void runTask() {
@@ -24,7 +26,9 @@ public abstract class DefaultRunningTask extends DefaultTask implements GradleRu
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the {@link HytalePluginExtension} configured for this project.
+     *
+     * @return the active configuration extension
      */
     @Internal
     @Override

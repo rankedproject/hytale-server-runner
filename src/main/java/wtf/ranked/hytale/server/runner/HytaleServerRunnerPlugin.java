@@ -16,10 +16,11 @@ import wtf.ranked.hytale.server.runner.step.impl.PrepareDownloaderStep;
 import wtf.ranked.hytale.server.runner.task.global.LaunchServerTask;
 
 /**
- * Gradle plugin for booting a Hytale server.
+ * Main entry point for the Hytale Server Runner Gradle plugin.
  * <p>
- * Registers the necessary services and tasks to manage the server
- * lifecycle, primarily through the {@code launchServer} task.
+ * This plugin initializes the project environment by configuring extensions,
+ * registering required shared build services, and setting up the task hierarchy
+ * needed to manage the Hytale server lifecycle.
  */
 @NullMarked
 public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
@@ -35,16 +36,17 @@ public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
         final HytalePluginExtension pluginExtension = extensions.create(GROUP, HytalePluginExtension.class, layout);
 
         serviceSetup(project);
-        project.afterEvaluate($ -> {
-            stepTaskSetup(project);
-            globalTaskSetup(project, pluginExtension);
-        });
+        stepTaskSetup(project);
+        globalTaskSetup(project, pluginExtension);
     }
 
     /**
-     * Registers internal build services required for the server environment.
+     * Registers internal Gradle build services required to facilitate server operations.
+     * <p>
+     * These services, such as the {@link HttpResourceProvider}, are managed by the
+     * {@link GradleServiceRegistrar} and made available for task execution.
      *
-     * @param project current project instance
+     * @param project the current project instance
      */
     private void serviceSetup(final Project project) {
         final GradleServiceRegistrar serviceRegistrar = new GradleServiceRegistrar(project);
@@ -52,18 +54,27 @@ public abstract class HytaleServerRunnerPlugin implements Plugin<Project> {
     }
 
     /**
-     * Sets up the global tasks for server interaction.
+     * Registers the public-facing tasks that users interact with to manage the server.
      * <p>
-     * Registers {@code launchServer} to start the server instance.
+     * This includes tasks like {@code launchServer}, which serves as the primary
+     * entry point for running the server instance.
      *
-     * @param project current project instance
-     * @param pluginExtension the extension used to configure the runner
+     * @param project         the current project instance
+     * @param pluginExtension the configuration extension providing project-specific settings
      */
     private void globalTaskSetup(final Project project, final HytalePluginExtension pluginExtension) {
         final GlobalTaskRegistrar taskRegistrar = new GlobalTaskRegistrar(project, pluginExtension);
         taskRegistrar.register("launchServer", LaunchServerTask.class);
     }
 
+    /**
+     * Configures the internal lifecycle tasks responsible for individual server setup steps.
+     * <p>
+     * Registers discrete units of work such as downloading assets, mod management,
+     * and environment preparation using the {@link StepTaskRegistrar}.
+     *
+     * @param project the current project instance
+     */
     private void stepTaskSetup(final Project project) {
         final StepTaskRegistrar taskRegistrar = new StepTaskRegistrar(project);
         taskRegistrar.register("downloadModStep", DownloadModStep.class);

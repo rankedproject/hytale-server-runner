@@ -2,16 +2,16 @@ package wtf.ranked.hytale.server.runner.mod.strategy;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.BuildService;
 import org.gradle.workers.WorkAction;
 import org.gradle.workers.WorkParameters;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 import wtf.ranked.hytale.server.runner.mod.Mod;
 import wtf.ranked.hytale.server.runner.resource.exception.ResourceDownloadException;
-
-import java.io.File;
 
 /**
  * Base strategy for downloading and installing Hytale mods.
@@ -34,31 +34,13 @@ public abstract class ModDownloaderStrategy<M extends Mod>
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void execute() throws ResourceDownloadException {
+    public final void execute() throws ResourceDownloadException {
         final M mod = (M) getParameters().getMod().get();
-        downloadMod(mod);
-    }
-
-    /**
-     * Orchestrates the installation of a mod.
-     * Checks for the mod's existence on disk before triggering
-     * the implementation-specific {@link #download(Mod)} method.
-     *
-     * @param mod the mod definition to process
-     */
-    public final void downloadMod(final @NonNull M mod) throws ResourceDownloadException {
-        final HytalePluginExtension hytalePluginExtension = this.getParameters().getHytalePluginExtension().get();
-        final File modsDirectory = hytalePluginExtension.getModDirectory().get().getAsFile();
-
-        if (!modsDirectory.exists()) {
-            modsDirectory.mkdirs();
-        }
-
         if (isModInstalled(mod.getFileName())) {
             return;
         }
 
-        this.download(mod);
+        download(mod);
     }
 
     /**
@@ -68,10 +50,8 @@ public abstract class ModDownloaderStrategy<M extends Mod>
      * @return {@code true} if the mod file exists on disk, {@code false} otherwise
      */
     protected boolean isModInstalled(final @NonNull String identifier) {
-        final HytalePluginExtension hytalePluginExtension = this.getParameters().getHytalePluginExtension().get();
-        final File modsDirectory = hytalePluginExtension.getModDirectory().get().getAsFile();
-
-        return new File(modsDirectory, identifier).exists();
+        final DirectoryProperty modDirectory = getParameters().getHytalePluginExtension().get().getModDirectory();
+        return modDirectory.get().file(identifier).getAsFile().exists();
     }
 
     /**
@@ -84,6 +64,7 @@ public abstract class ModDownloaderStrategy<M extends Mod>
     /**
      * Parameters for the mod downloader work action.
      */
+    @NullMarked
     public interface ModDownloaderExtension extends WorkParameters {
 
         /**
@@ -91,13 +72,13 @@ public abstract class ModDownloaderStrategy<M extends Mod>
          *
          * @return the boot extension property
          */
-        @NonNull Property<HytalePluginExtension> getHytalePluginExtension();
+        Property<HytalePluginExtension> getHytalePluginExtension();
 
         /**
          * The mod instance to be downloaded.
          *
          * @return the mod property
          */
-        @NonNull Property<Mod> getMod();
+        Property<Mod> getMod();
     }
 }

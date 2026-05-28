@@ -10,28 +10,35 @@ import wtf.ranked.hytale.server.runner.step.TaskStep;
 import java.util.List;
 
 /**
- * Orchestrator task that provides a high-level entry point for users.
+ * Base class for high-level orchestrator tasks.
  * <p>
- * Global tasks are organized under the {@code hytale} group and
- * coordinate the execution of multiple {@link TaskStep} implementations
- * to perform complex operations like launching or updating the server.
+ * Global tasks serve as the primary entry points for users. They are categorized
+ * under the {@link HytaleServerRunnerPlugin#GLOBAL_TASK_GROUP} and are responsible
+ * for coordinating the execution flow by aggregating multiple {@link TaskStep}
+ * implementations into a cohesive lifecycle.
  */
 public abstract class GlobalRunningTask extends DefaultTask {
 
     /**
-     * Initializes the task and assigns it to the plugin's task group.
+     * Initializes the task and assigns it to the global plugin task group.
      */
     protected GlobalRunningTask() {
         setGroup(HytaleServerRunnerPlugin.GLOBAL_TASK_GROUP);
     }
 
     /**
-     * Defines the ordered sequence of steps required for this task's lifecycle.
+     * Defines the ordered sequence of {@link TaskStep} implementations that
+     * constitute the task's execution lifecycle.
      *
-     * @return a list of step classes to be executed in order
+     * @return an ordered list of step classes to be executed
      */
     public abstract @NonNull List<Class<? extends TaskStep>> steps();
 
+    /**
+     * Retrieves the {@link HytalePluginExtension} configured for this project.
+     *
+     * @return the active configuration extension
+     */
     @Internal
     protected @NonNull HytalePluginExtension getHytalePluginExtension() {
         return getProject().getExtensions().getByType(HytalePluginExtension.class);

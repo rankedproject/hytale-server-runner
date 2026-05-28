@@ -8,17 +8,18 @@ import wtf.ranked.hytale.server.runner.HytalePluginExtension;
 
 /**
  * Base class for tasks that launch the Hytale server process.
- * * <p>Typically used as a <b>Global Task</b>. It ensures that all
- * preparation logic in {@link #run()} is completed before the
- * external Java process is started.
+ * <p>
+ * This class extends {@link JavaExec} to provide a specialized execution lifecycle.
+ * It ensures that custom preparation logic is executed via {@link #run()} before
+ * the underlying Java process is spawned.
  */
 public abstract class JavaExecRunningTask extends JavaExec implements GradleRunningTask {
 
     /**
-     * Entry point for Gradle execution.
+     * Executes the task workflow.
      * <p>
-     * Runs the local task logic first, then calls the superclass
-     * to spawn the Java Virtual Machine.
+     * First invokes the implementation-specific {@link #run()} logic, followed by
+     * the standard {@link JavaExec} process execution.
      */
     @TaskAction
     @Override
@@ -28,7 +29,9 @@ public abstract class JavaExecRunningTask extends JavaExec implements GradleRunn
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the {@link HytalePluginExtension} associated with the current project.
+     *
+     * @return the plugin extension instance
      */
     @Internal
     @Override

@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum OnlineMode {
+public enum Patchline {
 
-    AUTHENTICATED("authenticated"),
-    OFFLINE("offline");
+    RELEASE("release"),
+    PRE_RELEASE("pre-release");
 
     private final String identifier;
 }

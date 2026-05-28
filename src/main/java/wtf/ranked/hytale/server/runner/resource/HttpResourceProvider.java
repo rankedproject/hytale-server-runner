@@ -26,6 +26,8 @@ import java.nio.file.Path;
  */
 public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
 
+    private static final String FAILED_MESSAGE = "Failed to download resource %s. Server returned HTTP %s";
+
     private final HttpClient httpClient = HttpClient.newBuilder()
             .followRedirects(HttpClient.Redirect.ALWAYS)
             .build();
@@ -60,12 +62,10 @@ public abstract non-sealed class HttpResourceProvider extends ResourceProvider {
         final HttpResponse<Path> httpResponse = this.httpClient.send(httpRequest, responseBodyHandler);
 
         final int statusCode = httpResponse.statusCode();
-        final boolean isStatusCodeAllow = statusCode >= 200 && statusCode < 300;
+        final boolean isStatusCodeSucceed = statusCode >= 200 && statusCode < 300;
 
-        if (!isStatusCodeAllow || Files.size(destinationPath) <= 0) {
-            throw new ResourceDownloadException(
-                    "Failed to download resource %s. Server returned HTTP %s".formatted(destinationFile.getName(), statusCode)
-            );
+        if (!isStatusCodeSucceed || Files.size(destinationPath) <= 0) {
+            throw new ResourceDownloadException(FAILED_MESSAGE.formatted(destinationFile.getName(), statusCode));
         }
     }
 }

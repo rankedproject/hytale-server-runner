@@ -1,7 +1,9 @@
 package wtf.ranked.hytale.server.runner.step;
 
+import org.jspecify.annotations.NullMarked;
 import wtf.ranked.hytale.server.runner.task.GradleRunningTask;
 
+@NullMarked
 public interface TaskStep extends GradleRunningTask {
 
     /**

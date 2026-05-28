@@ -8,7 +8,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.nio.file.Files;
 
 /**
  * Utility class for file and directory operations.
@@ -17,57 +17,38 @@ import java.util.Arrays;
  * the cleanup of server files and directories.
  */
 @UtilityClass
+@SuppressWarnings("UnusedReturnValue")
 public final class FileUtil {
 
     /**
-     * Extracts a ZIP file to the specified destination and deletes the source archive.
+     * Extracts all contents of a ZIP archive to the specified destination and
+     * subsequently deletes the source archive file.
      *
-     * @param zip             source zip file
-     * @param destinationPath directory to extract files into
+     * @param zip             the source ZIP archive file to extract
+     * @param destinationPath the target directory where contents will be extracted
+     * @throws RuntimeException if an I/O error occurs during extraction or deletion
      */
     public void unpackZipFile(final @NonNull File zip, final @NonNull File destinationPath) {
         try (ZipFile zipFile = new ZipFile(zip)) {
             zipFile.extractAll(destinationPath.getAbsolutePath());
-            zipFile.getFile().delete();
+            Files.delete(zipFile.getFile().toPath());
         } catch (final IOException exception) {
             throw new RuntimeException(exception);
         }
     }
 
-    @SneakyThrows
-    public void deleteFile(final @NonNull File directory, final @NonNull String fileName) {
-        final File file = new File(directory, fileName);
-        if (file.exists()) {
-            FileUtils.forceDelete(file);
-        }
-    }
-
+    /**
+     * Safely deletes a file or directory recursively.
+     * <p>
+     * If the specified file or directory does not exist, no action is taken.
+     * Otherwise, it forces the deletion of the target and its contents.
+     *
+     * @param file the file or directory to delete
+     */
     @SneakyThrows
     public void deleteFile(final @NonNull File file) {
         if (file.exists()) {
             FileUtils.forceDelete(file);
-        }
-    }
-
-    /**
-     * Deletes multiple files within a directory by name.
-     *
-     * @param directory parent directory
-     * @param fileNames names of the files to remove
-     */
-    public void deleteFiles(final @NonNull File directory, final @NonNull String... fileNames) {
-        Arrays.asList(fileNames).forEach(fileName -> deleteFile(directory, fileName));
-    }
-
-    /**
-     * Recursively deletes a directory and all of its contents.
-     *
-     * @param directory directory to remove
-     */
-    @SneakyThrows
-    public void deleteDirectory(final @NonNull File directory) {
-        if (directory.exists()) {
-            FileUtils.forceDelete(directory);
         }
     }
 }

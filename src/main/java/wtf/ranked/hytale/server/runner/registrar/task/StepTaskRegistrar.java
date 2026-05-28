@@ -27,8 +27,7 @@ public final class StepTaskRegistrar implements Registrar<TaskStep> {
 
     @Override
     public void register(final String identifier, final Class<? extends TaskStep> value) {
-        final TaskContainer container = project.getTasks();
-        container.register(identifier, value);
+        project.getTasks().register(identifier, value);
         TaskStepRegistry.register(identifier, value);
     }
 }

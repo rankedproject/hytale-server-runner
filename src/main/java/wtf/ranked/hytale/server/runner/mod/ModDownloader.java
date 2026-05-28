@@ -26,7 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public final class ModDownloader {
 
-    private final HytalePluginExtension hytalePluginExtension;
+    private final HytalePluginExtension pluginExtension;
     private final WorkerExecutor workerExecutor;
 
     /**
@@ -50,7 +50,7 @@ public final class ModDownloader {
 
         final WorkQueue workQueue = workerExecutor.noIsolation();
         workQueue.submit(downloader, parameters -> {
-            parameters.getHytalePluginExtension().set(this.hytalePluginExtension);
+            parameters.getHytalePluginExtension().set(pluginExtension);
             parameters.getMod().set(mod);
         });
     }

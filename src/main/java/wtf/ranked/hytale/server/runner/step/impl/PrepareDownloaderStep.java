@@ -1,48 +1,62 @@
 package wtf.ranked.hytale.server.runner.step.impl;
 
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.services.ServiceReference;
-import org.jspecify.annotations.NonNull;
-import wtf.ranked.hytale.server.runner.HytalePluginExtension;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.OutputDirectory;
+import org.jspecify.annotations.NullMarked;
 import wtf.ranked.hytale.server.runner.resource.HttpResourceProvider;
 import wtf.ranked.hytale.server.runner.step.type.TaskStepDefault;
 import wtf.ranked.hytale.server.runner.util.FileUtil;
 
 import java.io.File;
 import java.net.URI;
+import java.time.Duration;
 
 /**
  * Initial preparation step for acquiring Hytale server components.
  * <p>
- * Downloads and extracts the core downloader utility if the
- * server software is not already present.
+ * This step manages the acquisition of the Hytale downloader utility. It downloads
+ * the required archive from a remote URI, validates it within the specified
+ * timeout, and extracts its contents into the server run directory.
  */
+@NullMarked
 public abstract class PrepareDownloaderStep extends TaskStepDefault {
 
-    @Override
-    public void runStep() {
-        final HytalePluginExtension pluginExtension = getHytalePluginExtension();
-        if (pluginExtension.getServerJar().get().exists() && pluginExtension.getAssets().get().exists()) {
-            setDidWork(false);
-            return;
-        }
-
-        final File runDirectory = pluginExtension.getRunDirectory().get().getAsFile();
-        FileUtil.deleteDirectory(runDirectory);
-        getProject().mkdir(runDirectory);
-
-        final File destinationZipFile = new File(runDirectory, "hytale-downloader.zip");
-        final URI serverFilesDownloadUri = pluginExtension.getServerDownloadUri().get();
-
-        getResourceProvider().get().builder()
-                .uri(serverFilesDownloadUri)
-                .timeout(pluginExtension.getDownloadTimeout().get())
-                .destinationFile(destinationZipFile)
-                .provide();
-
-        FileUtil.unpackZipFile(destinationZipFile, runDirectory);
+    public PrepareDownloaderStep() {
+        getRunDirectory().convention(getHytalePluginExtension().getRunDirectory());
+        getDownloadTimeout().convention(getHytalePluginExtension().getDownloadTimeout());
+        getServerDownloadUri().convention(getHytalePluginExtension().getServerDownloadUri());
     }
 
+    @Override
+    public final void runStep() {
+        final File runDirectory = getRunDirectory().get().getAsFile();
+        final File destinationZipFile = new File(runDirectory, "hytale-downloader.zip");
+
+        getLogger().lifecycle("Downloading hytale downloading files...");
+        getResourceProvider().get().builder()
+                .uri(getServerDownloadUri().get())
+                .timeout(getDownloadTimeout().get())
+                .destinationFile(destinationZipFile)
+                .provide();
+        getLogger().lifecycle("Successfully downloaded hytale downloading files!");
+
+        getLogger().lifecycle("Unpacking downloading files...");
+        FileUtil.unpackZipFile(destinationZipFile, runDirectory);
+        getLogger().lifecycle("Successfully unpacked downloading files!");
+    }
+
+    @Input
+    protected abstract Property<URI> getServerDownloadUri();
+
+    @Input
+    protected abstract Property<Duration> getDownloadTimeout();
+
+    @OutputDirectory
+    protected abstract DirectoryProperty getRunDirectory();
+
     @ServiceReference("httpResourceProvider")
-    protected abstract @NonNull Property<HttpResourceProvider> getResourceProvider();
+    protected abstract Property<HttpResourceProvider> getResourceProvider();
 }
