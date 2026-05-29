@@ -80,7 +80,7 @@ Configure your environment using the `hytaleServer` extension:
 ```kotlin
 hytaleServer {
     mods {
-        url("[https://example.com/mods/AwesomeMod.jar](https://example.com/mods/AwesomeMod.jar)", "AwesomeMod")
+        url("https://example.com/mods/AwesomeMod.jar", "AwesomeMod")
         github("owner", "repository", "tag", "assetName.jar")
     }
 
@@ -95,7 +95,7 @@ hytaleServer {
     serverDirectory.set(layout.projectDirectory.dir("server"))
     modDirectory.set(layout.projectDirectory.dir("mods"))
     serverJarMainClass.set("com.hypixel.hytale.Main")
-    serverDownloadUri.set(URI.create("[https://downloader.hytale.com/hytale-downloader.zip](https://downloader.hytale.com/hytale-downloader.zip)"))
+    serverDownloadUri.set(URI.create("https://downloader.hytale.com/hytale-downloader.zip"))
     downloadTimeout.set(Duration.ofSeconds(10))
 
     dependsOn("help", "testClasses")
